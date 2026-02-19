@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+sqlalchemy[asyncio]
+aiomysql
+pydantic[email]
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
+alembic
+python-dotenv
+httpx
+pyfcm
+boto3
+apscheduler
+bcrypt==4.0.1
