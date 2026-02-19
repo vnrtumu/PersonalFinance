@@ -10,6 +10,8 @@ import AddTransactionScreen from '../screens/transactions/AddTransactionScreen';
 import WalletDetailScreen from '../screens/wallets/WalletDetailScreen';
 import AddCategoryScreen from '../screens/categories/AddCategoryScreen';
 import ManageCategoriesScreen from '../screens/categories/ManageCategoriesScreen';
+import MyCardsScreen from '../screens/wallets/MyCardsScreen';
+import AddCardScreen from '../screens/wallets/AddCardScreen';
 
 const Stack = createStackNavigator();
 
@@ -36,6 +38,8 @@ const RootNavigator = () => {
                         <Stack.Screen name="WalletDetail" component={WalletDetailScreen} />
                         <Stack.Screen name="AddCategory" component={AddCategoryScreen} />
                         <Stack.Screen name="ManageCategories" component={ManageCategoriesScreen} />
+                        <Stack.Screen name="MyCards" component={MyCardsScreen} />
+                        <Stack.Screen name="AddCard" component={AddCardScreen} />
                     </>
                 )}
             </Stack.Navigator>

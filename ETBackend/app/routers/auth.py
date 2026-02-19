@@ -1,8 +1,11 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, status, File, UploadFile
+import os
+import uuid
+import shutil
 from sqlalchemy.ext.asyncio import AsyncSession
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from app.db.database import get_db
-from app.schemas.schemas import UserCreate, UserResponse, Token
+from app.schemas.schemas import UserCreate, UserResponse, Token, UserUpdate
 from app.crud import users as crud_users
 from app.core import security
 from jose import JWTError, jwt
@@ -48,3 +51,25 @@ async def get_current_user(token: str = Depends(oauth2_scheme), db: AsyncSession
     if user is None:
         raise credentials_exception
     return user
+
+@router.get("/me", response_model=UserResponse)
+async def get_me(current_user: UserResponse = Depends(get_current_user)):
+    return current_user
+
+@router.put("/me", response_model=UserResponse)
+async def update_me(user_update: UserUpdate, db: AsyncSession = Depends(get_db), current_user: UserResponse = Depends(get_current_user)):
+    return await crud_users.update_user(db, db_user=current_user, user_update=user_update.dict(exclude_unset=True))
+
+@router.post("/me/upload-avatar")
+async def upload_avatar(file: UploadFile = File(...), db: AsyncSession = Depends(get_db), current_user: UserResponse = Depends(get_current_user)):
+    file_extension = os.path.splitext(file.filename)[1]
+    unique_filename = f"avatar_{current_user.id}_{uuid.uuid4()}{file_extension}"
+    file_path = os.path.join("uploads", unique_filename)
+    
+    with open(file_path, "wb") as buffer:
+        shutil.copyfileobj(file.file, buffer)
+        
+    avatar_url = f"/uploads/{unique_filename}"
+    await crud_users.update_user(db, db_user=current_user, user_update={"avatar_url": avatar_url})
+    
+    return {"avatar_url": avatar_url}

@@ -164,7 +164,11 @@ const AnalyticsDashboardScreen = () => {
                 ) : (
                     <>
                         {/* Spending Overview */}
-                        <View style={[styles.card, styles.overviewCard]}>
+                        <View style={[
+                            styles.card,
+                            styles.overviewCard,
+                            (summary?.total_balance < 0) && { backgroundColor: '#ef4444' }
+                        ]}>
                             <Text style={styles.cardHeader}>Spending Overview</Text>
                             <View style={styles.mainStatContainer}>
                                 <Text style={styles.mainStatLabel}>Total Expenses</Text>
@@ -173,23 +177,23 @@ const AnalyticsDashboardScreen = () => {
 
                             <View style={styles.statsGrid}>
                                 <View style={styles.miniStat}>
-                                    <View style={[styles.miniIcon, { backgroundColor: 'rgba(16,185,129,0.1)' }]}>
-                                        <ArrowUpRightIcon size={16} color="#10b981" />
+                                    <View style={[styles.miniIcon, { backgroundColor: 'rgba(255,255,255,0.2)' }]}>
+                                        <ArrowUpRightIcon size={16} color="#fff" />
                                     </View>
                                     <View>
                                         <Text style={styles.miniLabel}>Income</Text>
-                                        <Text style={[styles.miniValue, { color: '#10b981' }]}>
+                                        <Text style={[styles.miniValue, { color: '#fff' }]}>
                                             +${summary?.total_income?.toLocaleString() || '0'}
                                         </Text>
                                     </View>
                                 </View>
                                 <View style={styles.miniStat}>
-                                    <View style={[styles.miniIcon, { backgroundColor: 'rgba(59,130,246,0.1)' }]}>
-                                        <ClockIcon size={16} color="#3b82f6" />
+                                    <View style={[styles.miniIcon, { backgroundColor: 'rgba(255,255,255,0.2)' }]}>
+                                        <TrendingUpIcon size={16} color="#fff" />
                                     </View>
                                     <View>
                                         <Text style={styles.miniLabel}>Balance</Text>
-                                        <Text style={[styles.miniValue, { color: '#3b82f6' }]}>
+                                        <Text style={[styles.miniValue, { color: '#fff' }]}>
                                             ${summary?.total_balance?.toLocaleString() || '0'}
                                         </Text>
                                     </View>

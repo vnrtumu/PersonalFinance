@@ -60,8 +60,18 @@ const DashboardScreen = ({ navigation }) => {
                     >
                         <PlusIcon size={24} color="#fff" />
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.profileBtn}>
-                        <Text style={styles.profileInitial}>{user?.name?.charAt(0).toUpperCase() || 'U'}</Text>
+                    <TouchableOpacity
+                        style={styles.profileBtn}
+                        onPress={() => navigation.navigate('Profile')}
+                    >
+                        {user?.avatar_url ? (
+                            <Image
+                                source={{ uri: `${APP_CONFIG.API_URL.replace('/api/v1', '')}${user.avatar_url}` }}
+                                style={styles.avatarImage}
+                            />
+                        ) : (
+                            <Text style={styles.profileInitial}>{user?.name?.charAt(0).toUpperCase() || 'U'}</Text>
+                        )}
                     </TouchableOpacity>
                 </View>
             </View>
@@ -178,7 +188,8 @@ const styles = StyleSheet.create({
     addBtn: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#6366f1', justifyContent: 'center', alignItems: 'center', marginRight: 12 },
     greeting: { fontSize: 24, fontWeight: '800', color: '#111827' },
     subtitle: { fontSize: 14, color: '#6b7280', marginTop: 4 },
-    profileBtn: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#6366f1', justifyContent: 'center', alignItems: 'center' },
+    profileBtn: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#6366f1', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' },
+    avatarImage: { width: '100%', height: '100%', resizeMode: 'cover' },
     profileInitial: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
     balanceCard: { backgroundColor: '#6366f1', borderRadius: 24, padding: 24, marginBottom: 24, shadowColor: '#6366f1', shadowOffset: { width: 0, height: 8 }, shadowOpacity: 0.3, shadowRadius: 15, elevation: 8 },
     balanceLabel: { color: 'rgba(255,255,255,0.7)', fontSize: 14, fontWeight: '600' },

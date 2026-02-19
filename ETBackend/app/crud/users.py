@@ -20,3 +20,12 @@ async def create_user(db: AsyncSession, user: UserCreate):
     await db.commit()
     await db.refresh(db_user)
     return db_user
+
+async def update_user(db: AsyncSession, db_user: User, user_update: dict):
+    for key, value in user_update.items():
+        if value is not None:
+            setattr(db_user, key, value)
+    
+    await db.commit()
+    await db.refresh(db_user)
+    return db_user
