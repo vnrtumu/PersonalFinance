@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { HomeIcon, ListIcon, UsersIcon, UserIcon, PlusIcon } from '../assets/icons';
+import {
+    HomeIcon,
+    ListIcon,
+    PlusIcon,
+    UserIcon,
+    UsersIcon,
+    TrendingUpIcon
+} from '../assets/icons';
 
 import DashboardScreen from '../screens/dashboard/DashboardScreen';
 import WalletsListScreen from '../screens/wallets/WalletsListScreen';
 import TransactionsListScreen from '../screens/transactions/TransactionsListScreen';
+import AnalyticsDashboardScreen from '../screens/analytics/AnalyticsDashboardScreen';
 import SplitExpensesScreen from '../screens/split/SplitExpensesScreen';
 import ProfileScreen from '../screens/profile/ProfileScreen';
 
@@ -57,12 +65,12 @@ const MainTabs = ({ navigation }) => {
                     }}
                 />
                 <Tab.Screen
-                    name="Add"
-                    component={View} // Placeholder
+                    name="Analytics"
+                    component={AnalyticsDashboardScreen}
                     options={{
                         tabBarButton: (props) => (
-                            <CustomTabBarButton {...props} onPress={() => navigation.navigate('AddTransaction')}>
-                                <PlusIcon size={30} color="#fff" />
+                            <CustomTabBarButton {...props} onPress={props.onPress}>
+                                <TrendingUpIcon size={30} color="#fff" />
                             </CustomTabBarButton>
                         ),
                     }}

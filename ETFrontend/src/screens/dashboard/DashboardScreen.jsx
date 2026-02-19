@@ -1,12 +1,22 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Modal, Pressable } from 'react-native';
 import { APP_CONFIG } from '../../utils/config';
-import { TrendingUpIcon, ArrowUpRightIcon, ArrowDownLeftIcon, WalletIcon, ClockIcon, ChevronRightIcon, TagIcon, FileTextIcon } from '../../assets/icons';
+import {
+    TrendingUpIcon,
+    ArrowUpRightIcon,
+    ArrowDownLeftIcon,
+    WalletIcon,
+    ClockIcon,
+    ChevronRightIcon,
+    TagIcon,
+    FileTextIcon,
+    PlusIcon
+} from '../../assets/icons';
 import { useSummary, useCategories } from '../../hooks/useData';
 import { useTransactions } from '../../hooks/useTransactions';
 import { useAuthStore } from '../../store/authStore';
 
-const DashboardScreen = () => {
+const DashboardScreen = ({ navigation }) => {
     const { data: summary } = useSummary();
     const { data: transactions } = useTransactions();
     const { data: categories } = useCategories();
@@ -17,7 +27,7 @@ const DashboardScreen = () => {
 
     return (
         <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-            {/* Receipt Modal */}
+            {/* ... Modal same ... */}
             <Modal
                 visible={!!selectedReceipt}
                 transparent={true}
@@ -43,36 +53,47 @@ const DashboardScreen = () => {
                     <Text style={styles.greeting}>Hello, {user?.name || 'User'} 👋</Text>
                     <Text style={styles.subtitle}>Your financial overview</Text>
                 </View>
-                <TouchableOpacity style={styles.profileBtn}>
-                    <Text style={styles.profileInitial}>{user?.name?.charAt(0).toUpperCase() || 'U'}</Text>
-                </TouchableOpacity>
+                <View style={styles.headerActions}>
+                    <TouchableOpacity
+                        style={styles.addBtn}
+                        onPress={() => navigation.navigate('AddTransaction')}
+                    >
+                        <PlusIcon size={24} color="#fff" />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={styles.profileBtn}>
+                        <Text style={styles.profileInitial}>{user?.name?.charAt(0).toUpperCase() || 'U'}</Text>
+                    </TouchableOpacity>
+                </View>
             </View>
 
             {/* Balance Card */}
-            <View style={styles.balanceCard}>
-                <Text style={styles.balanceLabel}>Total Balance</Text>
+            <View style={[
+                styles.balanceCard,
+                { backgroundColor: (summary?.total_balance >= 0) ? '#6366f1' : '#ef4444' }
+            ]}>
+                <Text style={styles.balanceLabel}>Total Balance (This Month)</Text>
                 <Text style={styles.balanceAmount}>
-                    ${summary?.total_balance?.toLocaleString(undefined, { minimumFractionDigits: 2 }) || '0.00'}
+                    {(summary?.total_balance >= 0) ? '' : '-'}${Math.abs(summary?.total_balance || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                 </Text>
                 <View style={styles.balanceRow}>
                     <View style={styles.balanceItem}>
-                        <View style={[styles.balanceIcon, { backgroundColor: 'rgba(16,185,129,0.15)' }]}>
-                            <ArrowUpRightIcon size={16} color="#10b981" />
+                        <View style={[styles.balanceIcon, { backgroundColor: 'rgba(255,255,255,0.2)' }]}>
+                            <ArrowUpRightIcon size={16} color="#fff" />
                         </View>
                         <View>
                             <Text style={styles.balanceItemLabel}>Income</Text>
-                            <Text style={[styles.balanceItemValue, { color: '#10b981' }]}>
+                            <Text style={[styles.balanceItemValue, { color: '#fff' }]}>
                                 +${summary?.total_income?.toLocaleString(undefined, { minimumFractionDigits: 2 }) || '0.00'}
                             </Text>
                         </View>
                     </View>
                     <View style={styles.balanceItem}>
-                        <View style={[styles.balanceIcon, { backgroundColor: 'rgba(239,68,68,0.15)' }]}>
-                            <ArrowDownLeftIcon size={16} color="#ef4444" />
+                        <View style={[styles.balanceIcon, { backgroundColor: 'rgba(255,255,255,0.2)' }]}>
+                            <ArrowDownLeftIcon size={16} color="#fff" />
                         </View>
                         <View>
                             <Text style={styles.balanceItemLabel}>Expenses</Text>
-                            <Text style={[styles.balanceItemValue, { color: '#ef4444' }]}>
+                            <Text style={[styles.balanceItemValue, { color: '#fff' }]}>
                                 -${summary?.total_expenses?.toLocaleString(undefined, { minimumFractionDigits: 2 }) || '0.00'}
                             </Text>
                         </View>
@@ -153,6 +174,8 @@ const DashboardScreen = () => {
 const styles = StyleSheet.create({
     container: { flex: 1, backgroundColor: '#f9fafb', padding: 20 },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 40, marginBottom: 24 },
+    headerActions: { flexDirection: 'row', alignItems: 'center' },
+    addBtn: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#6366f1', justifyContent: 'center', alignItems: 'center', marginRight: 12 },
     greeting: { fontSize: 24, fontWeight: '800', color: '#111827' },
     subtitle: { fontSize: 14, color: '#6b7280', marginTop: 4 },
     profileBtn: { width: 44, height: 44, borderRadius: 22, backgroundColor: '#6366f1', justifyContent: 'center', alignItems: 'center' },
