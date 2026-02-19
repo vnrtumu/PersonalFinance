@@ -27,6 +27,7 @@ import {
 } from '../../assets/icons';
 import { useQuery } from '@tanstack/react-query';
 import apiClient from '../../services/api';
+import COLORS from '../../utils/theme';
 
 const { width } = Dimensions.get('window');
 
@@ -36,7 +37,7 @@ const MONTHS = [
 ];
 
 const AnalyticsDashboardScreen = () => {
-    const [period, setPeriod] = useState('month'); // 'month', 'year', 'all', 'custom'
+    const [period, setPeriod] = useState('month');
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const [showMonthPicker, setShowMonthPicker] = useState(false);
@@ -114,7 +115,7 @@ const AnalyticsDashboardScreen = () => {
 
     return (
         <SafeAreaView style={styles.safeArea}>
-            <StatusBar barStyle="dark-content" />
+            <StatusBar barStyle="light-content" />
 
             <View style={styles.header}>
                 <Text style={styles.title}>Analytics</Text>
@@ -159,7 +160,7 @@ const AnalyticsDashboardScreen = () => {
             <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
                 {isLoading ? (
                     <View style={styles.centerContent}>
-                        <ActivityIndicator size="large" color="#6366f1" />
+                        <ActivityIndicator size="large" color={COLORS.primary} />
                     </View>
                 ) : (
                     <>
@@ -167,7 +168,7 @@ const AnalyticsDashboardScreen = () => {
                         <View style={[
                             styles.card,
                             styles.overviewCard,
-                            (summary?.total_balance < 0) && { backgroundColor: '#ef4444' }
+                            (summary?.total_balance < 0) && { backgroundColor: COLORS.expense }
                         ]}>
                             <Text style={styles.cardHeader}>Spending Overview</Text>
                             <View style={styles.mainStatContainer}>
@@ -206,7 +207,7 @@ const AnalyticsDashboardScreen = () => {
                             <Text style={styles.sectionTitle}>Category Breakdown</Text>
                             {breakdown?.breakdown?.length === 0 ? (
                                 <View style={styles.emptyCard}>
-                                    <TagIcon size={40} color="#e5e7eb" />
+                                    <TagIcon size={40} color={COLORS.textMuted} />
                                     <Text style={styles.emptyText}>No data for this period</Text>
                                 </View>
                             ) : (
@@ -216,8 +217,8 @@ const AnalyticsDashboardScreen = () => {
                                         <View key={index} style={styles.breakdownItem}>
                                             <View style={styles.itemHeader}>
                                                 <View style={styles.itemTitleGroup}>
-                                                    <View style={[styles.iconContainer, { backgroundColor: '#f3f4f6' }]}>
-                                                        <Icon size={20} color="#6366f1" />
+                                                    <View style={[styles.iconContainer, { backgroundColor: COLORS.surfaceElevated }]}>
+                                                        <Icon size={20} color={COLORS.primary} />
                                                     </View>
                                                     <Text style={styles.itemName}>{item.name}</Text>
                                                 </View>
@@ -227,7 +228,7 @@ const AnalyticsDashboardScreen = () => {
                                                 <View
                                                     style={[
                                                         styles.progressBar,
-                                                        { width: `${item.percentage}%`, backgroundColor: '#6366f1' }
+                                                        { width: `${item.percentage}%`, backgroundColor: COLORS.primary }
                                                     ]}
                                                 />
                                             </View>
@@ -256,7 +257,7 @@ const AnalyticsDashboardScreen = () => {
                         <View style={styles.modalHeader}>
                             <Text style={styles.modalTitle}>Custom Date Range</Text>
                             <TouchableOpacity onPress={() => setShowCustomModal(false)}>
-                                <XIcon size={24} color="#111827" />
+                                <XIcon size={24} color={COLORS.textPrimary} />
                             </TouchableOpacity>
                         </View>
 
@@ -267,6 +268,7 @@ const AnalyticsDashboardScreen = () => {
                                 value={tempRange.start}
                                 onChangeText={(text) => setTempRange({ ...tempRange, start: text })}
                                 placeholder="2026-01-01"
+                                placeholderTextColor={COLORS.textMuted}
                             />
                         </View>
 
@@ -277,11 +279,12 @@ const AnalyticsDashboardScreen = () => {
                                 value={tempRange.end}
                                 onChangeText={(text) => setTempRange({ ...tempRange, end: text })}
                                 placeholder="2026-02-19"
+                                placeholderTextColor={COLORS.textMuted}
                             />
                         </View>
 
                         <TouchableOpacity style={styles.applyBtn} onPress={handleApplyCustom}>
-                            <CheckIcon size={20} color="#fff" />
+                            <CheckIcon size={20} color={COLORS.buttonText} />
                             <Text style={styles.applyBtnText}>Apply Filter</Text>
                         </TouchableOpacity>
                     </View>
@@ -300,15 +303,15 @@ const AnalyticsDashboardScreen = () => {
                         <View style={styles.modalHeader}>
                             <View style={styles.yearSelector}>
                                 <TouchableOpacity onPress={() => setSelectedYear(y => y - 1)}>
-                                    <ChevronLeftIcon size={24} color="#6366f1" />
+                                    <ChevronLeftIcon size={24} color={COLORS.primary} />
                                 </TouchableOpacity>
                                 <Text style={styles.yearText}>{selectedYear}</Text>
                                 <TouchableOpacity onPress={() => setSelectedYear(y => y + 1)}>
-                                    <ChevronRightIcon size={24} color="#6366f1" />
+                                    <ChevronRightIcon size={24} color={COLORS.primary} />
                                 </TouchableOpacity>
                             </View>
                             <TouchableOpacity onPress={() => setShowMonthPicker(false)}>
-                                <XIcon size={24} color="#111827" />
+                                <XIcon size={24} color={COLORS.textPrimary} />
                             </TouchableOpacity>
                         </View>
 
@@ -339,7 +342,7 @@ const AnalyticsDashboardScreen = () => {
 };
 
 const styles = StyleSheet.create({
-    safeArea: { flex: 1, backgroundColor: '#fff' },
+    safeArea: { flex: 1, backgroundColor: COLORS.background },
     header: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -347,9 +350,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 16,
     },
-    title: { fontSize: 24, fontWeight: '800', color: '#111827' },
-    periodBadge: { backgroundColor: '#f3f4f6', paddingHorizontal: 12, paddingVertical: 6, borderRadius: 12 },
-    periodText: { fontSize: 13, fontWeight: '700', color: '#6366f1' },
+    title: { fontSize: 24, fontWeight: '800', color: COLORS.textPrimary },
+    periodBadge: { backgroundColor: COLORS.surfaceElevated, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 12 },
+    periodText: { fontSize: 13, fontWeight: '700', color: COLORS.primary },
     filterContainer: {
         flexDirection: 'row',
         paddingHorizontal: 20,
@@ -360,16 +363,16 @@ const styles = StyleSheet.create({
         flex: 1,
         paddingVertical: 10,
         borderRadius: 12,
-        backgroundColor: '#f3f4f6',
+        backgroundColor: COLORS.surfaceElevated,
         alignItems: 'center'
     },
-    activeFilterTab: { backgroundColor: '#6366f1' },
-    filterTabText: { fontSize: 13, fontWeight: '600', color: '#6b7280' },
-    activeFilterTabText: { color: '#fff' },
-    content: { flex: 1, backgroundColor: '#f9fafb', paddingHorizontal: 20 },
+    activeFilterTab: { backgroundColor: COLORS.primary },
+    filterTabText: { fontSize: 13, fontWeight: '600', color: COLORS.textSecondary },
+    activeFilterTabText: { color: COLORS.buttonText },
+    content: { flex: 1, backgroundColor: COLORS.background, paddingHorizontal: 20 },
     centerContent: { flex: 1, justifyContent: 'center', alignItems: 'center', marginTop: 100 },
-    card: { backgroundColor: '#fff', borderRadius: 24, padding: 20, marginBottom: 24, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.05, shadowRadius: 10, elevation: 1 },
-    overviewCard: { marginTop: 20, backgroundColor: '#6366f1' },
+    card: { backgroundColor: COLORS.surface, borderRadius: 24, padding: 20, marginBottom: 24, borderWidth: 1, borderColor: COLORS.divider },
+    overviewCard: { marginTop: 20, backgroundColor: COLORS.primary },
     cardHeader: { color: 'rgba(255,255,255,0.7)', fontSize: 14, fontWeight: '700', marginBottom: 16 },
     mainStatContainer: { marginBottom: 24 },
     mainStatLabel: { color: '#fff', fontSize: 13, opacity: 0.8 },
@@ -380,36 +383,36 @@ const styles = StyleSheet.create({
     miniLabel: { color: 'rgba(255,255,255,0.7)', fontSize: 11, fontWeight: '600' },
     miniValue: { fontSize: 14, fontWeight: '700' },
     section: { marginBottom: 24 },
-    sectionTitle: { fontSize: 18, fontWeight: '800', color: '#111827', marginBottom: 16 },
-    breakdownItem: { backgroundColor: '#fff', borderRadius: 20, padding: 16, marginBottom: 12, shadowColor: '#000', shadowOffset: { width: 0, height: 1 }, shadowOpacity: 0.02, shadowRadius: 5, elevation: 1 },
+    sectionTitle: { fontSize: 18, fontWeight: '800', color: COLORS.textPrimary, marginBottom: 16 },
+    breakdownItem: { backgroundColor: COLORS.surface, borderRadius: 20, padding: 16, marginBottom: 12, borderWidth: 1, borderColor: COLORS.divider },
     itemHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
     itemTitleGroup: { flexDirection: 'row', alignItems: 'center' },
     iconContainer: { width: 40, height: 40, borderRadius: 12, justifyContent: 'center', alignItems: 'center', marginRight: 12 },
-    itemName: { fontSize: 15, fontWeight: '700', color: '#1f292d' },
-    itemAmount: { fontSize: 15, fontWeight: '800', color: '#111827' },
-    progressBarContainer: { height: 8, backgroundColor: '#f3f4f6', borderRadius: 4, overflow: 'hidden' },
+    itemName: { fontSize: 15, fontWeight: '700', color: COLORS.textPrimary },
+    itemAmount: { fontSize: 15, fontWeight: '800', color: COLORS.textPrimary },
+    progressBarContainer: { height: 8, backgroundColor: COLORS.surfaceElevated, borderRadius: 4, overflow: 'hidden' },
     progressBar: { height: '100%', borderRadius: 4 },
     itemFooter: { marginTop: 8 },
-    itemPercentage: { fontSize: 12, fontWeight: '600', color: '#9ca3af' },
-    emptyCard: { backgroundColor: '#fff', borderRadius: 24, padding: 40, alignItems: 'center', justifyContent: 'center' },
-    emptyText: { marginTop: 16, fontSize: 14, color: '#9ca3af', fontWeight: '600' },
+    itemPercentage: { fontSize: 12, fontWeight: '600', color: COLORS.textSecondary },
+    emptyCard: { backgroundColor: COLORS.surface, borderRadius: 24, padding: 40, alignItems: 'center', justifyContent: 'center', borderWidth: 1, borderColor: COLORS.divider },
+    emptyText: { marginTop: 16, fontSize: 14, color: COLORS.textMuted, fontWeight: '600' },
 
-    modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
-    modalContent: { backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: 24, minHeight: 400 },
+    modalOverlay: { flex: 1, backgroundColor: COLORS.modalOverlay, justifyContent: 'flex-end' },
+    modalContent: { backgroundColor: COLORS.surface, borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: 24, minHeight: 400 },
     modalHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 },
-    modalTitle: { fontSize: 20, fontWeight: '800', color: '#111827' },
+    modalTitle: { fontSize: 20, fontWeight: '800', color: COLORS.textPrimary },
     yearSelector: { flexDirection: 'row', alignItems: 'center', gap: 16 },
-    yearText: { fontSize: 18, fontWeight: '800', color: '#111827' },
+    yearText: { fontSize: 18, fontWeight: '800', color: COLORS.textPrimary },
     monthGrid: { flexDirection: 'row', flexWrap: 'wrap', gap: 12, justifyContent: 'center' },
-    monthItem: { width: (width - 80) / 3, paddingVertical: 16, borderRadius: 16, backgroundColor: '#f3f4f6', alignItems: 'center' },
-    activeMonthItem: { backgroundColor: '#6366f1' },
-    monthText: { fontSize: 15, fontWeight: '700', color: '#6b7280' },
-    activeMonthText: { color: '#fff' },
+    monthItem: { width: (width - 80) / 3, paddingVertical: 16, borderRadius: 16, backgroundColor: COLORS.surfaceElevated, alignItems: 'center' },
+    activeMonthItem: { backgroundColor: COLORS.primary },
+    monthText: { fontSize: 15, fontWeight: '700', color: COLORS.textSecondary },
+    activeMonthText: { color: COLORS.buttonText },
     inputGroup: { marginBottom: 20 },
-    inputLabel: { fontSize: 13, fontWeight: '700', color: '#6b7280', marginBottom: 8 },
-    input: { backgroundColor: '#f3f4f6', borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12, fontSize: 15, color: '#111827' },
-    applyBtn: { backgroundColor: '#6366f1', borderRadius: 16, paddingVertical: 16, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 8, marginTop: 12 },
-    applyBtnText: { color: '#fff', fontSize: 16, fontWeight: '700' },
+    inputLabel: { fontSize: 13, fontWeight: '700', color: COLORS.textSecondary, marginBottom: 8 },
+    input: { backgroundColor: COLORS.surfaceElevated, borderRadius: 12, paddingHorizontal: 16, paddingVertical: 12, fontSize: 15, color: COLORS.textPrimary },
+    applyBtn: { backgroundColor: COLORS.primary, borderRadius: 16, paddingVertical: 16, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', gap: 8, marginTop: 12 },
+    applyBtnText: { color: COLORS.buttonText, fontSize: 16, fontWeight: '700' },
 });
 
 export default AnalyticsDashboardScreen;

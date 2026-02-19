@@ -17,6 +17,7 @@ import {
     CheckIcon
 } from '../../assets/icons';
 import { useAddWallet } from '../../hooks/useWallets';
+import COLORS from '../../utils/theme';
 
 const AddCardScreen = ({ navigation }) => {
     const [name, setName] = useState('');
@@ -42,7 +43,7 @@ const AddCardScreen = ({ navigation }) => {
         const payload = {
             name,
             type: 'credit_card',
-            balance: 0, // Current balance starts at 0
+            balance: 0,
             last_4: last4,
             total_limit: parseFloat(totalLimit),
             bill_date: billDate ? parseInt(billDate) : null,
@@ -63,11 +64,11 @@ const AddCardScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.safeArea}>
-            <StatusBar barStyle="dark-content" />
+            <StatusBar barStyle="light-content" />
 
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                    <ChevronLeftIcon size={24} color="#111827" />
+                    <ChevronLeftIcon size={24} color={COLORS.textPrimary} />
                 </TouchableOpacity>
                 <Text style={styles.title}>Add New Card</Text>
                 <View style={{ width: 44 }} />
@@ -76,7 +77,7 @@ const AddCardScreen = ({ navigation }) => {
             <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
                 <View style={styles.cardPreview}>
                     <View style={styles.previewIconBox}>
-                        <CreditCardIcon size={32} color="#6366f1" />
+                        <CreditCardIcon size={32} color={COLORS.lavender} />
                     </View>
                     <View>
                         <Text style={styles.previewName}>{name || 'CARD NAME'}</Text>
@@ -89,7 +90,7 @@ const AddCardScreen = ({ navigation }) => {
                     <TextInput
                         style={styles.input}
                         placeholder="e.g. HDFC REGALIA"
-                        placeholderTextColor="#9ca3af"
+                        placeholderTextColor={COLORS.textMuted}
                         value={name}
                         onChangeText={setName}
                     />
@@ -101,7 +102,7 @@ const AddCardScreen = ({ navigation }) => {
                         <TextInput
                             style={styles.input}
                             placeholder="4321"
-                            placeholderTextColor="#9ca3af"
+                            placeholderTextColor={COLORS.textMuted}
                             value={last4}
                             onChangeText={setLast4}
                             keyboardType="numeric"
@@ -113,7 +114,7 @@ const AddCardScreen = ({ navigation }) => {
                         <TextInput
                             style={styles.input}
                             placeholder="120000"
-                            placeholderTextColor="#9ca3af"
+                            placeholderTextColor={COLORS.textMuted}
                             value={totalLimit}
                             onChangeText={setTotalLimit}
                             keyboardType="numeric"
@@ -131,7 +132,7 @@ const AddCardScreen = ({ navigation }) => {
                         <TextInput
                             style={styles.input}
                             placeholder="05"
-                            placeholderTextColor="#9ca3af"
+                            placeholderTextColor={COLORS.textMuted}
                             value={billDate}
                             onChangeText={setBillDate}
                             keyboardType="numeric"
@@ -143,7 +144,7 @@ const AddCardScreen = ({ navigation }) => {
                         <TextInput
                             style={styles.input}
                             placeholder="25"
-                            placeholderTextColor="#9ca3af"
+                            placeholderTextColor={COLORS.textMuted}
                             value={dueDate}
                             onChangeText={setDueDate}
                             keyboardType="numeric"
@@ -157,7 +158,7 @@ const AddCardScreen = ({ navigation }) => {
                     <TextInput
                         style={styles.input}
                         placeholder="0.00"
-                        placeholderTextColor="#9ca3af"
+                        placeholderTextColor={COLORS.textMuted}
                         value={additionalCharges}
                         onChangeText={setAdditionalCharges}
                         keyboardType="numeric"
@@ -170,10 +171,10 @@ const AddCardScreen = ({ navigation }) => {
                     disabled={addWalletMutation.isPending}
                 >
                     {addWalletMutation.isPending ? (
-                        <ActivityIndicator color="#fff" />
+                        <ActivityIndicator color={COLORS.buttonText} />
                     ) : (
                         <>
-                            <CheckIcon size={20} color="#fff" />
+                            <CheckIcon size={20} color={COLORS.buttonText} />
                             <Text style={styles.saveButtonText}>Save Card</Text>
                         </>
                     )}
@@ -186,7 +187,7 @@ const AddCardScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    safeArea: { flex: 1, backgroundColor: '#fff' },
+    safeArea: { flex: 1, backgroundColor: COLORS.background },
     header: {
         flexDirection: 'row',
         alignItems: 'center',
@@ -194,42 +195,42 @@ const styles = StyleSheet.create({
         paddingHorizontal: 16,
         paddingVertical: 12,
     },
-    backButton: { width: 44, height: 44, borderRadius: 12, backgroundColor: '#f3f4f6', justifyContent: 'center', alignItems: 'center' },
-    title: { fontSize: 20, fontWeight: '800', color: '#111827' },
-    content: { flex: 1, backgroundColor: '#f9fafb', paddingHorizontal: 20 },
+    backButton: { width: 44, height: 44, borderRadius: 12, backgroundColor: COLORS.surfaceElevated, justifyContent: 'center', alignItems: 'center' },
+    title: { fontSize: 20, fontWeight: '800', color: COLORS.textPrimary },
+    content: { flex: 1, backgroundColor: COLORS.background, paddingHorizontal: 20 },
     cardPreview: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#6366f1',
+        backgroundColor: COLORS.primary,
         padding: 24,
         borderRadius: 24,
         marginTop: 20,
         marginBottom: 30,
-        shadowColor: '#6366f1',
+        shadowColor: COLORS.primary,
         shadowOffset: { width: 0, height: 10 },
         shadowOpacity: 0.2,
         shadowRadius: 15,
         elevation: 10
     },
     previewIconBox: { width: 56, height: 56, borderRadius: 16, backgroundColor: 'rgba(255,255,255,0.2)', justifyContent: 'center', alignItems: 'center', marginRight: 16 },
-    previewName: { color: '#fff', fontSize: 18, fontWeight: '800' },
-    previewNumber: { color: 'rgba(255,255,255,0.7)', fontSize: 14, fontWeight: '600', marginTop: 4, letterSpacing: 1 },
+    previewName: { color: COLORS.buttonText, fontSize: 18, fontWeight: '800' },
+    previewNumber: { color: 'rgba(15,15,26,0.5)', fontSize: 14, fontWeight: '600', marginTop: 4, letterSpacing: 1 },
     inputGroup: { marginBottom: 20 },
-    label: { fontSize: 13, fontWeight: '700', color: '#6b7280', marginBottom: 8, marginLeft: 4 },
+    label: { fontSize: 13, fontWeight: '700', color: COLORS.textSecondary, marginBottom: 8, marginLeft: 4 },
     input: {
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.surface,
         padding: 16,
         borderRadius: 16,
         fontSize: 16,
-        color: '#111827',
+        color: COLORS.textPrimary,
         borderWidth: 1,
-        borderColor: '#f3f4f6',
+        borderColor: COLORS.border,
     },
     row: { flexDirection: 'row', justifyContent: 'space-between' },
     sectionDivider: { marginBottom: 16, marginTop: 10 },
-    sectionHeader: { fontSize: 14, fontWeight: '800', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: 1 },
+    sectionHeader: { fontSize: 14, fontWeight: '800', color: COLORS.textMuted, textTransform: 'uppercase', letterSpacing: 1 },
     saveButton: {
-        backgroundColor: '#6366f1',
+        backgroundColor: COLORS.primary,
         padding: 18,
         borderRadius: 20,
         flexDirection: 'row',
@@ -237,14 +238,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         marginTop: 20,
         gap: 10,
-        shadowColor: '#6366f1',
+        shadowColor: COLORS.primary,
         shadowOffset: { width: 0, height: 10 },
         shadowOpacity: 0.3,
         shadowRadius: 10,
         elevation: 5,
     },
-    saveButtonText: { color: '#fff', fontSize: 18, fontWeight: '700' },
-    disabledButton: { backgroundColor: '#9ca3af' }
+    saveButtonText: { color: COLORS.buttonText, fontSize: 18, fontWeight: '700' },
+    disabledButton: { backgroundColor: COLORS.textMuted }
 });
 
 export default AddCardScreen;

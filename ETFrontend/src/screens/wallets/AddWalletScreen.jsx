@@ -9,6 +9,7 @@ import {
     ChevronLeftIcon
 } from '../../assets/icons';
 import { useAddWallet } from '../../hooks/useWallets';
+import COLORS from '../../utils/theme';
 
 const walletTypes = [
     { id: 'cash', label: 'Cash', icon: WalletIcon },
@@ -48,11 +49,11 @@ const AddWalletScreen = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.safeArea}>
-            <StatusBar barStyle="dark-content" />
+            <StatusBar barStyle="light-content" />
 
             <View style={styles.header}>
                 <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                    <ChevronLeftIcon size={24} color="#111827" />
+                    <ChevronLeftIcon size={24} color={COLORS.textPrimary} />
                 </TouchableOpacity>
                 <Text style={styles.title}>New Wallet</Text>
                 <View style={{ width: 40 }} />
@@ -64,7 +65,7 @@ const AddWalletScreen = ({ navigation }) => {
                     <TextInput
                         style={styles.input}
                         placeholder="e.g. Personal Bank, Cash"
-                        placeholderTextColor="#9ca3af"
+                        placeholderTextColor={COLORS.textMuted}
                         value={name}
                         onChangeText={setName}
                     />
@@ -75,7 +76,7 @@ const AddWalletScreen = ({ navigation }) => {
                     <TextInput
                         style={styles.input}
                         placeholder="0.00"
-                        placeholderTextColor="#9ca3af"
+                        placeholderTextColor={COLORS.textMuted}
                         value={balance}
                         onChangeText={setBalance}
                         keyboardType="numeric"
@@ -93,7 +94,7 @@ const AddWalletScreen = ({ navigation }) => {
                                 style={[styles.typeItem, isSelected && styles.activeType]}
                                 onPress={() => setType(item.id)}
                             >
-                                <Icon size={22} color={isSelected ? '#fff' : '#6366f1'} />
+                                <Icon size={22} color={isSelected ? COLORS.buttonText : COLORS.primary} />
                                 <Text style={[styles.typeLabel, isSelected && styles.activeTypeLabel]}>
                                     {item.label}
                                 </Text>
@@ -107,7 +108,7 @@ const AddWalletScreen = ({ navigation }) => {
                     onPress={handleCreate}
                     disabled={addWalletMutation.isPending}
                 >
-                    {addWalletMutation.isPending ? <ActivityIndicator color="#fff" /> : <Text style={styles.saveButtonText}>Create Wallet</Text>}
+                    {addWalletMutation.isPending ? <ActivityIndicator color={COLORS.buttonText} /> : <Text style={styles.saveButtonText}>Create Wallet</Text>}
                 </TouchableOpacity>
 
                 <View style={{ height: 40 }} />
@@ -117,57 +118,57 @@ const AddWalletScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    safeArea: { flex: 1, backgroundColor: '#fff' },
+    safeArea: { flex: 1, backgroundColor: COLORS.background },
     header: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 16,
         paddingVertical: 12,
-        backgroundColor: '#fff'
+        backgroundColor: COLORS.background
     },
-    backButton: { width: 40, height: 40, borderRadius: 20, backgroundColor: '#f3f4f6', justifyContent: 'center', alignItems: 'center' },
-    title: { fontSize: 18, fontWeight: '800', color: '#111827' },
-    content: { flex: 1, backgroundColor: '#f9fafb', paddingHorizontal: 20 },
+    backButton: { width: 40, height: 40, borderRadius: 20, backgroundColor: COLORS.surfaceElevated, justifyContent: 'center', alignItems: 'center' },
+    title: { fontSize: 18, fontWeight: '800', color: COLORS.textPrimary },
+    content: { flex: 1, backgroundColor: COLORS.background, paddingHorizontal: 20 },
     inputGroup: { marginTop: 20, marginBottom: 20 },
-    label: { fontSize: 14, fontWeight: '700', color: '#374151', marginBottom: 10, marginLeft: 4 },
+    label: { fontSize: 14, fontWeight: '700', color: COLORS.textSecondary, marginBottom: 10, marginLeft: 4 },
     input: {
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.surface,
         padding: 18,
         borderRadius: 16,
         fontSize: 16,
-        color: '#111827',
+        color: COLORS.textPrimary,
         borderWidth: 1,
-        borderColor: '#f3f4f6',
+        borderColor: COLORS.border,
     },
     typeGrid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'space-between', marginBottom: 20 },
     typeItem: {
         width: '31%',
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.surface,
         padding: 15,
         borderRadius: 18,
         alignItems: 'center',
         marginBottom: 12,
         borderWidth: 1,
-        borderColor: '#f3f4f6',
+        borderColor: COLORS.border,
     },
-    activeType: { backgroundColor: '#6366f1', borderColor: '#6366f1' },
-    typeLabel: { fontSize: 12, color: '#4b5563', marginTop: 8, fontWeight: '600' },
-    activeTypeLabel: { color: '#fff' },
+    activeType: { backgroundColor: COLORS.primary, borderColor: COLORS.primary },
+    typeLabel: { fontSize: 12, color: COLORS.textSecondary, marginTop: 8, fontWeight: '600' },
+    activeTypeLabel: { color: COLORS.buttonText },
     saveButton: {
-        backgroundColor: '#6366f1',
+        backgroundColor: COLORS.primary,
         padding: 18,
         borderRadius: 20,
         alignItems: 'center',
         marginTop: 10,
-        shadowColor: '#6366f1',
+        shadowColor: COLORS.primary,
         shadowOffset: { width: 0, height: 10 },
         shadowOpacity: 0.3,
         shadowRadius: 10,
         elevation: 5,
     },
-    saveButtonText: { color: '#fff', fontSize: 18, fontWeight: '700' },
-    disabledButton: { backgroundColor: '#9ca3af' }
+    saveButtonText: { color: COLORS.buttonText, fontSize: 18, fontWeight: '700' },
+    disabledButton: { backgroundColor: COLORS.textMuted }
 });
 
 export default AddWalletScreen;

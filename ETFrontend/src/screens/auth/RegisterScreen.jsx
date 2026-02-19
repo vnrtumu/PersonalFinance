@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, ScrollView } from 'react-native';
 import { useRegister } from '../../hooks/useAuth';
+import COLORS from '../../utils/theme';
 
 const RegisterScreen = ({ navigation }) => {
     const [name, setName] = useState('');
@@ -40,12 +41,14 @@ const RegisterScreen = ({ navigation }) => {
                 <TextInput
                     style={styles.input}
                     placeholder="Full Name"
+                    placeholderTextColor={COLORS.textMuted}
                     value={name}
                     onChangeText={setName}
                 />
                 <TextInput
                     style={styles.input}
                     placeholder="Email"
+                    placeholderTextColor={COLORS.textMuted}
                     value={email}
                     onChangeText={setEmail}
                     autoCapitalize="none"
@@ -54,6 +57,7 @@ const RegisterScreen = ({ navigation }) => {
                 <TextInput
                     style={styles.input}
                     placeholder="Password"
+                    placeholderTextColor={COLORS.textMuted}
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry
@@ -61,6 +65,7 @@ const RegisterScreen = ({ navigation }) => {
                 <TextInput
                     style={styles.input}
                     placeholder="Confirm Password"
+                    placeholderTextColor={COLORS.textMuted}
                     value={confirmPassword}
                     onChangeText={setConfirmPassword}
                     secureTextEntry
@@ -68,7 +73,7 @@ const RegisterScreen = ({ navigation }) => {
             </View>
 
             <TouchableOpacity style={styles.button} onPress={handleRegister} disabled={registerMutation.isPending}>
-                {registerMutation.isPending ? <ActivityIndicator color="#fff" /> : <Text style={styles.buttonText}>Register</Text>}
+                {registerMutation.isPending ? <ActivityIndicator color={COLORS.buttonText} /> : <Text style={styles.buttonText}>Register</Text>}
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => navigation.navigate('Login')}>
@@ -79,26 +84,28 @@ const RegisterScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    container: { flexGrow: 1, justifyContent: 'center', padding: 20, backgroundColor: '#f8f9fa' },
-    title: { fontSize: 32, fontWeight: 'bold', color: '#333', textAlign: 'center' },
-    subtitle: { fontSize: 16, color: '#666', textAlign: 'center', marginBottom: 40 },
+    container: { flexGrow: 1, justifyContent: 'center', padding: 20, backgroundColor: COLORS.background },
+    title: { fontSize: 32, fontWeight: 'bold', color: COLORS.textPrimary, textAlign: 'center' },
+    subtitle: { fontSize: 16, color: COLORS.textSecondary, textAlign: 'center', marginBottom: 40 },
     inputContainer: { marginBottom: 20 },
     input: {
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.surface,
         padding: 15,
         borderRadius: 10,
         marginBottom: 15,
         borderWidth: 1,
-        borderColor: '#ddd',
+        borderColor: COLORS.border,
+        color: COLORS.textPrimary,
+        fontSize: 16,
     },
     button: {
-        backgroundColor: '#007bff',
+        backgroundColor: COLORS.primary,
         padding: 15,
         borderRadius: 10,
         alignItems: 'center',
     },
-    buttonText: { color: '#fff', fontSize: 18, fontWeight: 'bold' },
-    linkText: { color: '#007bff', textAlign: 'center', marginTop: 20 },
+    buttonText: { color: COLORS.buttonText, fontSize: 18, fontWeight: 'bold' },
+    linkText: { color: COLORS.primary, textAlign: 'center', marginTop: 20 },
 });
 
 export default RegisterScreen;

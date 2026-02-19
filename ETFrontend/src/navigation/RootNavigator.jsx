@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useAuthStore } from '../store/authStore';
 import LoginScreen from '../screens/auth/LoginScreen';
@@ -12,8 +12,23 @@ import AddCategoryScreen from '../screens/categories/AddCategoryScreen';
 import ManageCategoriesScreen from '../screens/categories/ManageCategoriesScreen';
 import MyCardsScreen from '../screens/wallets/MyCardsScreen';
 import AddCardScreen from '../screens/wallets/AddCardScreen';
+import COLORS from '../utils/theme';
 
 const Stack = createStackNavigator();
+
+const AppTheme = {
+    ...DefaultTheme,
+    dark: true,
+    colors: {
+        ...DefaultTheme.colors,
+        primary: COLORS.primary,
+        background: COLORS.background,
+        card: COLORS.surface,
+        text: COLORS.textPrimary,
+        border: COLORS.divider,
+        notification: COLORS.primary,
+    },
+};
 
 const RootNavigator = () => {
     const { isAuthenticated, initialize } = useAuthStore();
@@ -23,7 +38,7 @@ const RootNavigator = () => {
     }, []);
 
     return (
-        <NavigationContainer>
+        <NavigationContainer theme={AppTheme}>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 {!isAuthenticated ? (
                     <>

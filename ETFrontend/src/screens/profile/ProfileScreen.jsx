@@ -5,6 +5,7 @@ import { UserIcon, BellIcon, ShieldIcon, WalletIcon, CircleHelpIcon, LogOutIcon,
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
 import { useUploadAvatar } from '../../hooks/useUser';
 import apiClient from '../../services/api';
+import COLORS from '../../utils/theme';
 
 const ProfileScreen = ({ navigation }) => {
     const { user, logout } = useAuthStore();
@@ -12,14 +13,14 @@ const ProfileScreen = ({ navigation }) => {
 
     const uploadAvatarMutation = useUploadAvatar();
 
-    const MenuItem = ({ icon: Icon, title, value, color = '#6366f1', onPress }) => (
+    const MenuItem = ({ icon: Icon, title, value, color = COLORS.primary, onPress }) => (
         <TouchableOpacity style={styles.menuItem} onPress={onPress}>
-            <View style={[styles.menuIcon, { backgroundColor: `${color}10` }]}>
+            <View style={[styles.menuIcon, { backgroundColor: `${color}20` }]}>
                 <Icon size={22} color={color} />
             </View>
             <Text style={styles.menuTitle}>{title}</Text>
             {value && <Text style={styles.menuValue}>{value}</Text>}
-            <ChevronRightIcon size={20} color="#9ca3af" />
+            <ChevronRightIcon size={20} color={COLORS.textMuted} />
         </TouchableOpacity>
     );
 
@@ -105,14 +106,14 @@ const ProfileScreen = ({ navigation }) => {
                     <View style={styles.pickerOptions}>
                         <Text style={styles.modalTitle}>Update Profile Picture</Text>
                         <TouchableOpacity style={styles.optionBtn} onPress={takePhoto}>
-                            <View style={[styles.optionIcon, { backgroundColor: '#f0fdf4' }]}>
-                                <CameraIcon size={24} color="#10b981" />
+                            <View style={[styles.optionIcon, { backgroundColor: COLORS.incomeBg }]}>
+                                <CameraIcon size={24} color={COLORS.income} />
                             </View>
                             <Text style={styles.optionText}>Take Photo</Text>
                         </TouchableOpacity>
                         <TouchableOpacity style={styles.optionBtn} onPress={chooseFromLibrary}>
-                            <View style={[styles.optionIcon, { backgroundColor: '#eff6ff' }]}>
-                                <ImageIcon size={24} color="#2563eb" />
+                            <View style={[styles.optionIcon, { backgroundColor: COLORS.lavenderBg }]}>
+                                <ImageIcon size={24} color={COLORS.lavender} />
                             </View>
                             <Text style={styles.optionText}>Choose from Gallery</Text>
                         </TouchableOpacity>
@@ -135,7 +136,7 @@ const ProfileScreen = ({ navigation }) => {
                     value="2 Cards"
                     onPress={() => navigation.navigate('MyCards')}
                 />
-                <MenuItem icon={BellIcon} title="Notifications" color="#f59e0b" />
+                <MenuItem icon={BellIcon} title="Notifications" color={COLORS.cream} />
             </View>
 
             <View style={styles.section}>
@@ -143,19 +144,19 @@ const ProfileScreen = ({ navigation }) => {
                 <MenuItem
                     icon={TagIcon}
                     title="Categories"
-                    color="#6366f1"
+                    color={COLORS.primary}
                     onPress={() => navigation.navigate('ManageCategories')}
                 />
             </View>
 
             <View style={styles.section}>
                 <Text style={styles.sectionTitle}>Security & Support</Text>
-                <MenuItem icon={ShieldIcon} title="Security" color="#10b981" />
-                <MenuItem icon={CircleHelpIcon} title="Help Center" color="#6b7280" />
+                <MenuItem icon={ShieldIcon} title="Security" color={COLORS.income} />
+                <MenuItem icon={CircleHelpIcon} title="Help Center" color={COLORS.textSecondary} />
             </View>
 
             <TouchableOpacity style={styles.logoutButton} onPress={logout}>
-                <LogOutIcon size={20} color="#ef4444" />
+                <LogOutIcon size={20} color={COLORS.expense} />
                 <Text style={styles.logoutText}>Log Out</Text>
             </TouchableOpacity>
 
@@ -166,34 +167,34 @@ const ProfileScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#f9fafb', padding: 20 },
+    container: { flex: 1, backgroundColor: COLORS.background, padding: 20 },
     header: { marginTop: 40, marginBottom: 20 },
-    title: { fontSize: 28, fontWeight: '800', color: '#111827' },
-    profileCard: { backgroundColor: '#fff', borderRadius: 24, padding: 24, alignItems: 'center', marginBottom: 30, shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.05, shadowRadius: 20, elevation: 3 },
+    title: { fontSize: 28, fontWeight: '800', color: COLORS.textPrimary },
+    profileCard: { backgroundColor: COLORS.surface, borderRadius: 24, padding: 24, alignItems: 'center', marginBottom: 30, borderWidth: 1, borderColor: COLORS.divider },
     avatarContainer: { position: 'relative', marginBottom: 16 },
-    avatar: { width: 90, height: 90, borderRadius: 45, backgroundColor: '#6366f1', justifyContent: 'center', alignItems: 'center', overflow: 'hidden' },
+    avatar: { width: 90, height: 90, borderRadius: 45, backgroundColor: COLORS.primary, justifyContent: 'center', alignItems: 'center', overflow: 'hidden' },
     avatarImage: { width: '100%', height: '100%', resizeMode: 'cover' },
-    avatarText: { fontSize: 32, fontWeight: 'bold', color: '#fff' },
-    editBadge: { position: 'absolute', bottom: 0, right: 0, backgroundColor: '#111827', width: 28, height: 28, borderRadius: 14, justifyContent: 'center', alignItems: 'center', borderWidth: 3, borderColor: '#fff' },
-    userName: { fontSize: 20, fontWeight: '700', color: '#111827' },
-    userEmail: { fontSize: 14, color: '#6b7280', marginTop: 4 },
+    avatarText: { fontSize: 32, fontWeight: 'bold', color: COLORS.buttonText },
+    editBadge: { position: 'absolute', bottom: 0, right: 0, backgroundColor: COLORS.surfaceElevated, width: 28, height: 28, borderRadius: 14, justifyContent: 'center', alignItems: 'center', borderWidth: 3, borderColor: COLORS.surface },
+    userName: { fontSize: 20, fontWeight: '700', color: COLORS.textPrimary },
+    userEmail: { fontSize: 14, color: COLORS.textSecondary, marginTop: 4 },
     section: { marginBottom: 24 },
-    sectionTitle: { fontSize: 14, fontWeight: '700', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12, marginLeft: 4 },
-    menuItem: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', padding: 16, borderRadius: 16, marginBottom: 8 },
+    sectionTitle: { fontSize: 14, fontWeight: '700', color: COLORS.textMuted, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 12, marginLeft: 4 },
+    menuItem: { flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.surface, padding: 16, borderRadius: 16, marginBottom: 8, borderWidth: 1, borderColor: COLORS.divider },
     menuIcon: { width: 40, height: 40, borderRadius: 12, justifyContent: 'center', alignItems: 'center', marginRight: 16 },
-    menuTitle: { flex: 1, fontSize: 16, fontWeight: '600', color: '#1f2937' },
-    menuValue: { fontSize: 14, color: '#6b7280', marginRight: 8 },
-    logoutButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#fee2e2', padding: 16, borderRadius: 16, marginTop: 10 },
-    logoutText: { fontSize: 16, fontWeight: '700', color: '#ef4444', marginLeft: 8 },
-    versionText: { textAlign: 'center', color: '#9ca3af', fontSize: 12, marginTop: 24 },
-    modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
-    pickerOptions: { backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: 24, paddingBottom: 40 },
-    modalTitle: { fontSize: 18, fontWeight: '800', color: '#111827', marginBottom: 24, textAlign: 'center' },
-    optionBtn: { flexDirection: 'row', alignItems: 'center', paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: '#f3f4f6' },
+    menuTitle: { flex: 1, fontSize: 16, fontWeight: '600', color: COLORS.textPrimary },
+    menuValue: { fontSize: 14, color: COLORS.textSecondary, marginRight: 8 },
+    logoutButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: COLORS.dangerBg, padding: 16, borderRadius: 16, marginTop: 10 },
+    logoutText: { fontSize: 16, fontWeight: '700', color: COLORS.expense, marginLeft: 8 },
+    versionText: { textAlign: 'center', color: COLORS.textMuted, fontSize: 12, marginTop: 24 },
+    modalOverlay: { flex: 1, backgroundColor: COLORS.modalOverlay, justifyContent: 'flex-end' },
+    pickerOptions: { backgroundColor: COLORS.surface, borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: 24, paddingBottom: 40 },
+    modalTitle: { fontSize: 18, fontWeight: '800', color: COLORS.textPrimary, marginBottom: 24, textAlign: 'center' },
+    optionBtn: { flexDirection: 'row', alignItems: 'center', paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: COLORS.divider },
     optionIcon: { width: 44, height: 44, borderRadius: 12, justifyContent: 'center', alignItems: 'center', marginRight: 16 },
-    optionText: { fontSize: 16, fontWeight: '700', color: '#374151' },
+    optionText: { fontSize: 16, fontWeight: '700', color: COLORS.textPrimary },
     cancelBtn: { marginTop: 12, borderBottomWidth: 0, justifyContent: 'center' },
-    cancelText: { fontSize: 16, fontWeight: '800', color: '#ef4444' },
+    cancelText: { fontSize: 16, fontWeight: '800', color: COLORS.expense },
 });
 
 export default ProfileScreen;
