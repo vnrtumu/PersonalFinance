@@ -1,11 +1,20 @@
 import React, { useState } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { HomeIcon, ListIcon, UsersIcon, UserIcon, PlusIcon } from '../assets/icons';
+import {
+    HomeIcon,
+    ListIcon,
+    PlusIcon,
+    UserIcon,
+    UsersIcon,
+    TrendingUpIcon
+} from '../assets/icons';
+import COLORS from '../utils/theme';
 
 import DashboardScreen from '../screens/dashboard/DashboardScreen';
 import WalletsListScreen from '../screens/wallets/WalletsListScreen';
 import TransactionsListScreen from '../screens/transactions/TransactionsListScreen';
+import AnalyticsDashboardScreen from '../screens/analytics/AnalyticsDashboardScreen';
 import SplitExpensesScreen from '../screens/split/SplitExpensesScreen';
 import ProfileScreen from '../screens/profile/ProfileScreen';
 
@@ -26,15 +35,15 @@ const CustomTabBarButton = ({ children, onPress }) => (
 const MainTabs = ({ navigation }) => {
 
     return (
-        <View style={{ flex: 1 }}>
+        <View style={{ flex: 1, backgroundColor: COLORS.background }}>
             <Tab.Navigator
                 screenOptions={{
                     headerShown: false,
                     tabBarShowLabel: true,
                     tabBarStyle: styles.tabBar,
                     tabBarItemStyle: { justifyContent: 'center', alignItems: 'center' },
-                    tabBarActiveTintColor: '#6366f1',
-                    tabBarInactiveTintColor: '#9ca3af',
+                    tabBarActiveTintColor: COLORS.tabActive,
+                    tabBarInactiveTintColor: COLORS.tabInactive,
                     tabBarLabelStyle: { fontSize: 11, fontWeight: '600', marginTop: 2 },
                 }}
             >
@@ -43,7 +52,7 @@ const MainTabs = ({ navigation }) => {
                     component={DashboardScreen}
                     options={{
                         tabBarIcon: ({ focused }) => (
-                            <HomeIcon size={24} color={focused ? '#6366f1' : '#9ca3af'} />
+                            <HomeIcon size={24} color={focused ? COLORS.tabActive : COLORS.tabInactive} />
                         ),
                     }}
                 />
@@ -52,17 +61,17 @@ const MainTabs = ({ navigation }) => {
                     component={TransactionsListScreen}
                     options={{
                         tabBarIcon: ({ focused }) => (
-                            <ListIcon size={24} color={focused ? '#6366f1' : '#9ca3af'} />
+                            <ListIcon size={24} color={focused ? COLORS.tabActive : COLORS.tabInactive} />
                         ),
                     }}
                 />
                 <Tab.Screen
-                    name="Add"
-                    component={View} // Placeholder
+                    name="Analytics"
+                    component={AnalyticsDashboardScreen}
                     options={{
                         tabBarButton: (props) => (
-                            <CustomTabBarButton {...props} onPress={() => navigation.navigate('AddTransaction')}>
-                                <PlusIcon size={30} color="#fff" />
+                            <CustomTabBarButton {...props} onPress={props.onPress}>
+                                <TrendingUpIcon size={30} color="#fff" />
                             </CustomTabBarButton>
                         ),
                     }}
@@ -72,7 +81,7 @@ const MainTabs = ({ navigation }) => {
                     component={SplitExpensesScreen}
                     options={{
                         tabBarIcon: ({ focused }) => (
-                            <UsersIcon size={24} color={focused ? '#6366f1' : '#9ca3af'} />
+                            <UsersIcon size={24} color={focused ? COLORS.tabActive : COLORS.tabInactive} />
                         ),
                     }}
                 />
@@ -81,7 +90,7 @@ const MainTabs = ({ navigation }) => {
                     component={ProfileScreen}
                     options={{
                         tabBarIcon: ({ focused }) => (
-                            <UserIcon size={24} color={focused ? '#6366f1' : '#9ca3af'} />
+                            <UserIcon size={24} color={focused ? COLORS.tabActive : COLORS.tabInactive} />
                         ),
                     }}
                 />
@@ -97,15 +106,17 @@ const styles = StyleSheet.create({
         left: 20,
         right: 20,
         elevation: 10,
-        backgroundColor: '#ffffff',
+        backgroundColor: COLORS.surface,
         borderRadius: 25,
         height: 70,
-        shadowColor: '#000',
+        shadowColor: COLORS.shadow,
         shadowOffset: { width: 0, height: 10 },
-        shadowOpacity: 0.1,
+        shadowOpacity: 0.3,
         shadowRadius: 15,
         borderTopWidth: 0,
         paddingBottom: 0,
+        borderWidth: 1,
+        borderColor: COLORS.divider,
     },
     fabContainer: {
         top: -30,
@@ -116,16 +127,16 @@ const styles = StyleSheet.create({
         width: 64,
         height: 64,
         borderRadius: 32,
-        backgroundColor: '#6366f1',
+        backgroundColor: COLORS.primary,
         justifyContent: 'center',
         alignItems: 'center',
-        shadowColor: '#6366f1',
+        shadowColor: COLORS.primary,
         shadowOffset: { width: 0, height: 10 },
         shadowOpacity: 0.4,
         shadowRadius: 15,
         elevation: 10,
         borderWidth: 4,
-        borderColor: '#f9fafb',
+        borderColor: COLORS.background,
     },
 });
 

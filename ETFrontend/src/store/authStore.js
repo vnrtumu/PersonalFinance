@@ -11,6 +11,12 @@ export const useAuthStore = create((set) => ({
         await AsyncStorage.setItem('user', JSON.stringify(user));
         set({ isAuthenticated: true, user, accessToken });
     },
+    setAvatar: async (avatarUrl) => {
+        const user = JSON.parse(await AsyncStorage.getItem('user'));
+        const updatedUser = { ...user, avatar_url: avatarUrl };
+        await AsyncStorage.setItem('user', JSON.stringify(updatedUser));
+        set((state) => ({ user: updatedUser }));
+    },
     logout: async () => {
         await AsyncStorage.removeItem('access_token');
         await AsyncStorage.removeItem('refresh_token');

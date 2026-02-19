@@ -24,6 +24,7 @@ class User(Base):
     name = Column(String(255), nullable=False)
     currency = Column(String(10), default="INR")
     timezone = Column(String(50), default="UTC")
+    avatar_url = Column(String(500), nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
     
     wallets = relationship("Wallet", back_populates="owner")
@@ -38,6 +39,11 @@ class Wallet(Base):
     name = Column(String(255), nullable=False)
     type = Column(Enum(WalletType), default=WalletType.CASH)
     balance = Column(Float, default=0.0)
+    last_4 = Column(String(4), nullable=True)
+    total_limit = Column(Float, nullable=True)
+    bill_date = Column(Integer, nullable=True) # Day of month
+    due_date = Column(Integer, nullable=True) # Day of month
+    additional_charges = Column(Float, default=0.0)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
 
     owner = relationship("User", back_populates="wallets")

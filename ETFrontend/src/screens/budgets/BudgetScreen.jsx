@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 import { useBudgets } from '../../hooks/useData';
+import COLORS from '../../utils/theme';
 
 const BudgetScreen = () => {
     const { data: budgets, isLoading } = useBudgets();
@@ -16,7 +17,7 @@ const BudgetScreen = () => {
                     <Text style={styles.amountText}>${spent.toFixed(0)} / ${item.monthly_limit}</Text>
                 </View>
                 <View style={styles.progressBarContainer}>
-                    <View style={[styles.progressBar, { width: `${progress * 100}%`, backgroundColor: progress > 0.8 ? '#dc3545' : '#28a745' }]} />
+                    <View style={[styles.progressBar, { width: `${progress * 100}%`, backgroundColor: progress > 0.8 ? COLORS.expense : COLORS.income }]} />
                 </View>
                 <Text style={styles.remainingText}>
                     {progress >= 1 ? 'Budget Exceeded!' : `$${(item.monthly_limit - spent).toFixed(0)} remaining`}
@@ -28,7 +29,7 @@ const BudgetScreen = () => {
     if (isLoading) {
         return (
             <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#007bff" />
+                <ActivityIndicator size="large" color={COLORS.primary} />
             </View>
         );
     }
@@ -47,23 +48,24 @@ const BudgetScreen = () => {
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#f8f9fa', padding: 20 },
-    title: { fontSize: 28, fontWeight: 'bold', color: '#333', marginTop: 40, marginBottom: 30 },
+    container: { flex: 1, backgroundColor: COLORS.background, padding: 20 },
+    title: { fontSize: 28, fontWeight: 'bold', color: COLORS.textPrimary, marginTop: 40, marginBottom: 30 },
     budgetCard: {
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.surface,
         padding: 20,
         borderRadius: 15,
         marginBottom: 15,
-        elevation: 2,
+        borderWidth: 1,
+        borderColor: COLORS.divider,
     },
     budgetHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: 15 },
-    categoryName: { fontSize: 16, fontWeight: 'bold', color: '#333' },
-    amountText: { fontSize: 14, color: '#666' },
-    progressBarContainer: { height: 8, backgroundColor: '#eee', borderRadius: 4, marginBottom: 10, overflow: 'hidden' },
+    categoryName: { fontSize: 16, fontWeight: 'bold', color: COLORS.textPrimary },
+    amountText: { fontSize: 14, color: COLORS.textSecondary },
+    progressBarContainer: { height: 8, backgroundColor: COLORS.surfaceElevated, borderRadius: 4, marginBottom: 10, overflow: 'hidden' },
     progressBar: { height: '100%', borderRadius: 4 },
-    remainingText: { fontSize: 12, color: '#999', textAlign: 'right' },
-    loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-    emptyText: { textAlign: 'center', color: '#999', marginTop: 40 },
+    remainingText: { fontSize: 12, color: COLORS.textMuted, textAlign: 'right' },
+    loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: COLORS.background },
+    emptyText: { textAlign: 'center', color: COLORS.textMuted, marginTop: 40 },
 });
 
 export default BudgetScreen;

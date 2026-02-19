@@ -13,6 +13,7 @@ import {
 } from '../../assets/icons';
 import { useCategories, useDeleteCategory } from '../../hooks/useData';
 import { Swipeable, GestureHandlerRootView } from 'react-native-gesture-handler';
+import COLORS from '../../utils/theme';
 
 const ManageCategoriesScreen = ({ navigation }) => {
     const { data: categories, isLoading } = useCategories();
@@ -78,13 +79,13 @@ const ManageCategoriesScreen = ({ navigation }) => {
 
         const content = (
             <View style={styles.categoryCard}>
-                <View style={[styles.iconContainer, { backgroundColor: activeTab === 'income' ? '#effbf6' : '#fff1f2' }]}>
-                    <Icon size={20} color={activeTab === 'income' ? '#10b981' : '#ef4444'} />
+                <View style={[styles.iconContainer, { backgroundColor: activeTab === 'income' ? COLORS.incomeBg : COLORS.expenseBg }]}>
+                    <Icon size={20} color={activeTab === 'income' ? COLORS.income : COLORS.expense} />
                 </View>
                 <Text style={styles.categoryName}>{category.name}</Text>
                 {isSystem ? (
                     <View style={styles.systemBadge}>
-                        <ShieldCheckIcon size={10} color="#9ca3af" />
+                        <ShieldCheckIcon size={10} color={COLORS.textMuted} />
                         <Text style={styles.systemBadgeText}>System</Text>
                     </View>
                 ) : (
@@ -113,18 +114,18 @@ const ManageCategoriesScreen = ({ navigation }) => {
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <SafeAreaView style={styles.safeArea}>
-                <StatusBar barStyle="dark-content" />
+                <StatusBar barStyle="light-content" />
 
                 <View style={styles.header}>
                     <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-                        <ChevronLeftIcon size={24} color="#111827" />
+                        <ChevronLeftIcon size={24} color={COLORS.textPrimary} />
                     </TouchableOpacity>
                     <Text style={styles.title}>Categories</Text>
                     <TouchableOpacity
                         onPress={() => navigation.navigate('AddCategory', { type: activeTab })}
                         style={styles.addButton}
                     >
-                        <PlusIcon size={20} color="#fff" />
+                        <PlusIcon size={20} color={COLORS.buttonText} />
                     </TouchableOpacity>
                 </View>
 
@@ -133,28 +134,28 @@ const ManageCategoriesScreen = ({ navigation }) => {
                         style={[styles.tab, activeTab === 'expense' && styles.activeExpenseTab]}
                         onPress={() => setActiveTab('expense')}
                     >
-                        <TrendingDownIcon size={18} color={activeTab === 'expense' ? '#ef4444' : '#6b7280'} />
+                        <TrendingDownIcon size={18} color={activeTab === 'expense' ? COLORS.expense : COLORS.textSecondary} />
                         <Text style={[styles.tabText, activeTab === 'expense' && styles.activeTabText]}>Expenses</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[styles.tab, activeTab === 'income' && styles.activeIncomeTab]}
                         onPress={() => setActiveTab('income')}
                     >
-                        <TrendingUpIcon size={18} color={activeTab === 'income' ? '#10b981' : '#6b7280'} />
+                        <TrendingUpIcon size={18} color={activeTab === 'income' ? COLORS.income : COLORS.textSecondary} />
                         <Text style={[styles.tabText, activeTab === 'income' && styles.activeTabText]}>Income</Text>
                     </TouchableOpacity>
                 </View>
 
                 {isLoading ? (
                     <View style={styles.loadingContainer}>
-                        <ActivityIndicator size="large" color="#6366f1" />
+                        <ActivityIndicator size="large" color={COLORS.primary} />
                     </View>
                 ) : (
                     <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
                         <View style={styles.categoryList}>
                             {displayedCategories.length === 0 ? (
                                 <View style={styles.emptyState}>
-                                    <TagIcon size={48} color="#e5e7eb" />
+                                    <TagIcon size={48} color={COLORS.textMuted} />
                                     <Text style={styles.emptyText}>No {activeTab} categories yet.</Text>
                                 </View>
                             ) : (
@@ -172,18 +173,18 @@ const ManageCategoriesScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    safeArea: { flex: 1, backgroundColor: '#fff' },
+    safeArea: { flex: 1, backgroundColor: COLORS.background },
     header: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 16,
         paddingVertical: 12,
-        backgroundColor: '#fff'
+        backgroundColor: COLORS.background
     },
-    backButton: { width: 40, height: 40, borderRadius: 20, backgroundColor: '#f3f4f6', justifyContent: 'center', alignItems: 'center' },
-    addButton: { width: 40, height: 40, borderRadius: 20, backgroundColor: '#6366f1', justifyContent: 'center', alignItems: 'center' },
-    title: { fontSize: 18, fontWeight: '800', color: '#111827' },
+    backButton: { width: 40, height: 40, borderRadius: 20, backgroundColor: COLORS.surfaceElevated, justifyContent: 'center', alignItems: 'center' },
+    addButton: { width: 40, height: 40, borderRadius: 20, backgroundColor: COLORS.primary, justifyContent: 'center', alignItems: 'center' },
+    title: { fontSize: 18, fontWeight: '800', color: COLORS.textPrimary },
     tabContainer: { flexDirection: 'row', paddingHorizontal: 20, marginTop: 10, marginBottom: 20 },
     tab: {
         flex: 1,
@@ -194,12 +195,12 @@ const styles = StyleSheet.create({
         borderBottomWidth: 2,
         borderBottomColor: 'transparent'
     },
-    activeExpenseTab: { borderBottomColor: '#ef4444' },
-    activeIncomeTab: { borderBottomColor: '#10b981' },
-    tabText: { marginLeft: 8, fontSize: 15, fontWeight: '700', color: '#6b7280' },
-    activeTabText: { color: '#111827' },
+    activeExpenseTab: { borderBottomColor: COLORS.expense },
+    activeIncomeTab: { borderBottomColor: COLORS.income },
+    tabText: { marginLeft: 8, fontSize: 15, fontWeight: '700', color: COLORS.textSecondary },
+    activeTabText: { color: COLORS.textPrimary },
     loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-    content: { flex: 1, backgroundColor: '#f9fafb', paddingHorizontal: 20 },
+    content: { flex: 1, backgroundColor: COLORS.background, paddingHorizontal: 20 },
     categoryList: { marginTop: 10 },
     itemWrapper: {
         marginBottom: 12,
@@ -209,26 +210,25 @@ const styles = StyleSheet.create({
     categoryCard: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.surface,
         padding: 16,
-        // Remove borderRadius and marginBottom as they are handled by itemWrapper for swipe alignment
     },
     iconContainer: { width: 44, height: 44, borderRadius: 14, justifyContent: 'center', alignItems: 'center', marginRight: 16 },
-    categoryName: { flex: 1, fontSize: 16, fontWeight: '600', color: '#1f2937' },
-    customBadge: { backgroundColor: '#f3f4f6', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8 },
-    customBadgeText: { fontSize: 10, fontWeight: '700', color: '#9ca3af', textTransform: 'uppercase' },
-    systemBadge: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#f9fafb', paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8, borderWidth: 1, borderColor: '#f3f4f6' },
-    systemBadgeText: { fontSize: 10, fontWeight: '700', color: '#9ca3af', textTransform: 'uppercase', marginLeft: 4 },
+    categoryName: { flex: 1, fontSize: 16, fontWeight: '600', color: COLORS.textPrimary },
+    customBadge: { backgroundColor: COLORS.surfaceElevated, paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8 },
+    customBadgeText: { fontSize: 10, fontWeight: '700', color: COLORS.textMuted, textTransform: 'uppercase' },
+    systemBadge: { flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.surfaceElevated, paddingHorizontal: 8, paddingVertical: 4, borderRadius: 8, borderWidth: 1, borderColor: COLORS.divider },
+    systemBadgeText: { fontSize: 10, fontWeight: '700', color: COLORS.textMuted, textTransform: 'uppercase', marginLeft: 4 },
     emptyState: { alignItems: 'center', marginTop: 100 },
-    emptyText: { marginTop: 16, color: '#9ca3af', fontSize: 15, fontWeight: '500' },
+    emptyText: { marginTop: 16, color: COLORS.textMuted, fontSize: 15, fontWeight: '500' },
     swipeActions: {
         flexDirection: 'row',
         width: 140,
         height: '100%',
     },
     swipeAction: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-    editAction: { backgroundColor: '#6366f1' },
-    deleteAction: { backgroundColor: '#ef4444' },
+    editAction: { backgroundColor: COLORS.primary },
+    deleteAction: { backgroundColor: COLORS.expense },
 });
 
 export default ManageCategoriesScreen;

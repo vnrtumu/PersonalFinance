@@ -14,6 +14,7 @@ import {
 import { useAddTransaction, useUploadReceipt, useUpdateTransaction } from '../../hooks/useTransactions';
 import { useCategories } from '../../hooks/useData';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
+import COLORS from '../../utils/theme';
 
 const AddTransactionScreen = ({ navigation, route }) => {
     const transactionToEdit = route.params?.transaction;
@@ -76,7 +77,6 @@ const AddTransactionScreen = ({ navigation, route }) => {
         let receiptUrl = transactionToEdit?.receipt_url || '';
 
         try {
-            // Only upload if it's a new local image (has no isExisting flag)
             if (receipt && !receipt.isExisting) {
                 const uploadResult = await uploadReceiptMutation.mutateAsync(receipt);
                 receiptUrl = uploadResult.receipt_url;
@@ -112,12 +112,12 @@ const AddTransactionScreen = ({ navigation, route }) => {
 
     return (
         <SafeAreaView style={styles.safeArea}>
-            <StatusBar barStyle="dark-content" />
+            <StatusBar barStyle="light-content" />
 
             {/* Header */}
             <View style={styles.header}>
                 <TouchableOpacity style={styles.backBtn} onPress={() => navigation.goBack()}>
-                    <ChevronLeftIcon size={24} color="#111827" />
+                    <ChevronLeftIcon size={24} color={COLORS.textPrimary} />
                 </TouchableOpacity>
                 <Text style={styles.headerTitle}>{isEditing ? 'Edit Transaction' : 'New Transaction'}</Text>
                 <View style={{ width: 40 }} />
@@ -135,14 +135,14 @@ const AddTransactionScreen = ({ navigation, route }) => {
                         <View style={styles.pickerOptions}>
                             <Text style={styles.modalTitle}>Select Receipt Source</Text>
                             <TouchableOpacity style={styles.optionBtn} onPress={takePhoto}>
-                                <View style={[styles.optionIcon, { backgroundColor: '#f0fdf4' }]}>
-                                    <CameraIcon size={24} color="#10b981" />
+                                <View style={[styles.optionIcon, { backgroundColor: COLORS.incomeBg }]}>
+                                    <CameraIcon size={24} color={COLORS.income} />
                                 </View>
                                 <Text style={styles.optionText}>Take Photo</Text>
                             </TouchableOpacity>
                             <TouchableOpacity style={styles.optionBtn} onPress={chooseFromLibrary}>
-                                <View style={[styles.optionIcon, { backgroundColor: '#eff6ff' }]}>
-                                    <ImageIcon size={24} color="#2563eb" />
+                                <View style={[styles.optionIcon, { backgroundColor: COLORS.lavenderBg }]}>
+                                    <ImageIcon size={24} color={COLORS.lavender} />
                                 </View>
                                 <Text style={styles.optionText}>Choose from Gallery</Text>
                             </TouchableOpacity>
@@ -162,14 +162,14 @@ const AddTransactionScreen = ({ navigation, route }) => {
                         style={[styles.typeBtn, type === 'expense' && styles.expenseActive]}
                         onPress={() => { setType('expense'); setSelectedCategory(null); }}
                     >
-                        <ArrowDownCircle size={18} color={type === 'expense' ? '#ef4444' : '#6b7280'} />
+                        <ArrowDownCircle size={18} color={type === 'expense' ? COLORS.expense : COLORS.textSecondary} />
                         <Text style={[styles.typeText, type === 'expense' && styles.activeTypeText]}>Expense</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[styles.typeBtn, type === 'income' && styles.incomeActive]}
                         onPress={() => { setType('income'); setSelectedCategory(null); }}
                     >
-                        <ArrowUpCircle size={18} color={type === 'income' ? '#10b981' : '#6b7280'} />
+                        <ArrowUpCircle size={18} color={type === 'income' ? COLORS.income : COLORS.textSecondary} />
                         <Text style={[styles.typeText, type === 'income' && styles.activeTypeText]}>Income</Text>
                     </TouchableOpacity>
                 </View>
@@ -180,6 +180,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
                     <TextInput
                         style={styles.amountInput}
                         placeholder="0.00"
+                        placeholderTextColor={COLORS.textMuted}
                         keyboardType="numeric"
                         value={amount}
                         onChangeText={setAmount}
@@ -206,7 +207,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
                                         onPress={() => setSelectedCategory(cat.id)}
                                     >
                                         <View style={[styles.iconBox, selectedCategory === cat.id && styles.selectedIconBox]}>
-                                            <CatIcon size={20} color={selectedCategory === cat.id ? '#fff' : '#6366f1'} />
+                                            <CatIcon size={20} color={selectedCategory === cat.id ? COLORS.buttonText : COLORS.primary} />
                                         </View>
                                         <Text style={[styles.itemLabel, selectedCategory === cat.id && styles.selectedLabel]}>
                                             {cat.name}
@@ -222,7 +223,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
                 <View style={styles.inputGroup}>
                     <Text style={styles.label}>Receipt (Optional)</Text>
                     <TouchableOpacity style={styles.uploadBtn} onPress={() => setShowPickerModal(true)}>
-                        <CameraIcon size={20} color="#6366f1" />
+                        <CameraIcon size={20} color={COLORS.primary} />
                         <Text style={styles.uploadText}>{receipt ? 'Receipt Selected' : 'Tap to capture or upload'}</Text>
                         {receipt && <Text style={styles.fileName}>{receipt.name || (receipt.isExisting ? 'Existing Receipt' : 'Selected Image')}</Text>}
                     </TouchableOpacity>
@@ -234,6 +235,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
                     <TextInput
                         style={styles.descriptionInput}
                         placeholder="What was this for?"
+                        placeholderTextColor={COLORS.textMuted}
                         multiline
                         value={description}
                         onChangeText={setDescription}
@@ -245,7 +247,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
                     onPress={handleSave}
                     disabled={isUploading}
                 >
-                    {isUploading ? <ActivityIndicator color="#fff" /> : <Text style={styles.saveBtnText}>{isEditing ? 'Update Transaction' : 'Save Transaction'}</Text>}
+                    {isUploading ? <ActivityIndicator color={COLORS.buttonText} /> : <Text style={styles.saveBtnText}>{isEditing ? 'Update Transaction' : 'Save Transaction'}</Text>}
                 </TouchableOpacity>
 
                 <View style={{ height: 40 }} />
@@ -255,50 +257,50 @@ const AddTransactionScreen = ({ navigation, route }) => {
 };
 
 const styles = StyleSheet.create({
-    safeArea: { flex: 1, backgroundColor: '#fff' },
+    safeArea: { flex: 1, backgroundColor: COLORS.background },
     header: {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 16,
         paddingVertical: 12,
-        backgroundColor: '#fff'
+        backgroundColor: COLORS.background
     },
-    backBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: '#f3f4f6', justifyContent: 'center', alignItems: 'center' },
-    headerTitle: { fontSize: 18, fontWeight: '800', color: '#111827' },
-    container: { flex: 1, backgroundColor: '#f9fafb', paddingHorizontal: 20 },
-    typeSelector: { flexDirection: 'row', backgroundColor: '#f3f4f6', borderRadius: 16, padding: 6, marginBottom: 24, marginTop: 20 },
+    backBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: COLORS.surfaceElevated, justifyContent: 'center', alignItems: 'center' },
+    headerTitle: { fontSize: 18, fontWeight: '800', color: COLORS.textPrimary },
+    container: { flex: 1, backgroundColor: COLORS.background, paddingHorizontal: 20 },
+    typeSelector: { flexDirection: 'row', backgroundColor: COLORS.surfaceElevated, borderRadius: 16, padding: 6, marginBottom: 24, marginTop: 20 },
     typeBtn: { flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'center', paddingVertical: 12, borderRadius: 12 },
-    expenseActive: { backgroundColor: '#fff', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 5, elevation: 2 },
-    incomeActive: { backgroundColor: '#fff', shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.1, shadowRadius: 5, elevation: 2 },
-    typeText: { fontSize: 15, fontWeight: '700', color: '#6b7280', marginLeft: 8 },
-    activeTypeText: { color: '#111827' },
+    expenseActive: { backgroundColor: COLORS.surface, shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.3, shadowRadius: 5, elevation: 2 },
+    incomeActive: { backgroundColor: COLORS.surface, shadowColor: COLORS.shadow, shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.3, shadowRadius: 5, elevation: 2 },
+    typeText: { fontSize: 15, fontWeight: '700', color: COLORS.textSecondary, marginLeft: 8 },
+    activeTypeText: { color: COLORS.textPrimary },
     amountContainer: { marginBottom: 24 },
-    label: { fontSize: 14, fontWeight: '700', color: '#374151', marginBottom: 10, marginLeft: 4 },
-    amountInput: { fontSize: 32, fontWeight: '800', color: '#111827', backgroundColor: '#fff', borderRadius: 20, padding: 20, borderWidth: 1, borderColor: '#f3f4f6' },
+    label: { fontSize: 14, fontWeight: '700', color: COLORS.textSecondary, marginBottom: 10, marginLeft: 4 },
+    amountInput: { fontSize: 32, fontWeight: '800', color: COLORS.textPrimary, backgroundColor: COLORS.surface, borderRadius: 20, padding: 20, borderWidth: 1, borderColor: COLORS.border },
     inputGroup: { marginBottom: 24 },
     horizontalSelect: { paddingVertical: 10, paddingRight: 20 },
     selectItem: { alignItems: 'center', marginRight: 20, width: 80 },
-    iconBox: { width: 50, height: 50, borderRadius: 15, backgroundColor: '#f0f0ff', justifyContent: 'center', alignItems: 'center', marginBottom: 8 },
-    selectedIconBox: { backgroundColor: '#6366f1' },
-    itemLabel: { fontSize: 13, color: '#4b5563', fontWeight: '600', textAlign: 'center' },
-    selectedLabel: { color: '#6366f1', fontWeight: '700' },
-    uploadBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: '#fff', padding: 18, borderRadius: 18, borderStyle: 'dashed', borderWidth: 1, borderColor: '#6366f1' },
-    uploadText: { fontSize: 15, fontWeight: '600', color: '#6366f1', marginLeft: 12 },
-    fileName: { fontSize: 10, color: '#6366f1', position: 'absolute', bottom: 4, left: 50, fontWeight: '600' },
-    descriptionInput: { backgroundColor: '#fff', borderRadius: 20, padding: 18, fontSize: 16, height: 100, textAlignVertical: 'top', borderWidth: 1, borderColor: '#f3f4f6' },
-    saveBtn: { backgroundColor: '#6366f1', height: 60, borderRadius: 20, justifyContent: 'center', alignItems: 'center', marginTop: 10, shadowColor: '#6366f1', shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.3, shadowRadius: 10, elevation: 5 },
-    saveBtnText: { color: '#fff', fontSize: 18, fontWeight: '700' },
-    disabledBtn: { backgroundColor: '#9ca3af' },
-    emptyText: { color: '#9ca3af', fontSize: 13, fontStyle: 'italic', paddingLeft: 4 },
-    modalOverlay: { flex: 1, backgroundColor: 'rgba(0,0,0,0.5)', justifyContent: 'flex-end' },
-    pickerOptions: { backgroundColor: '#fff', borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: 24, paddingBottom: 40 },
-    modalTitle: { fontSize: 18, fontWeight: '800', color: '#111827', marginBottom: 24, textAlign: 'center' },
-    optionBtn: { flexDirection: 'row', alignItems: 'center', paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: '#f3f4f6' },
+    iconBox: { width: 50, height: 50, borderRadius: 15, backgroundColor: COLORS.primaryMuted, justifyContent: 'center', alignItems: 'center', marginBottom: 8 },
+    selectedIconBox: { backgroundColor: COLORS.primary },
+    itemLabel: { fontSize: 13, color: COLORS.textSecondary, fontWeight: '600', textAlign: 'center' },
+    selectedLabel: { color: COLORS.primary, fontWeight: '700' },
+    uploadBtn: { flexDirection: 'row', alignItems: 'center', backgroundColor: COLORS.surface, padding: 18, borderRadius: 18, borderStyle: 'dashed', borderWidth: 1, borderColor: COLORS.primary },
+    uploadText: { fontSize: 15, fontWeight: '600', color: COLORS.primary, marginLeft: 12 },
+    fileName: { fontSize: 10, color: COLORS.primary, position: 'absolute', bottom: 4, left: 50, fontWeight: '600' },
+    descriptionInput: { backgroundColor: COLORS.surface, borderRadius: 20, padding: 18, fontSize: 16, height: 100, textAlignVertical: 'top', borderWidth: 1, borderColor: COLORS.border, color: COLORS.textPrimary },
+    saveBtn: { backgroundColor: COLORS.primary, height: 60, borderRadius: 20, justifyContent: 'center', alignItems: 'center', marginTop: 10, shadowColor: COLORS.primary, shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.3, shadowRadius: 10, elevation: 5 },
+    saveBtnText: { color: COLORS.buttonText, fontSize: 18, fontWeight: '700' },
+    disabledBtn: { backgroundColor: COLORS.textMuted },
+    emptyText: { color: COLORS.textMuted, fontSize: 13, fontStyle: 'italic', paddingLeft: 4 },
+    modalOverlay: { flex: 1, backgroundColor: COLORS.modalOverlay, justifyContent: 'flex-end' },
+    pickerOptions: { backgroundColor: COLORS.surface, borderTopLeftRadius: 30, borderTopRightRadius: 30, padding: 24, paddingBottom: 40 },
+    modalTitle: { fontSize: 18, fontWeight: '800', color: COLORS.textPrimary, marginBottom: 24, textAlign: 'center' },
+    optionBtn: { flexDirection: 'row', alignItems: 'center', paddingVertical: 16, borderBottomWidth: 1, borderBottomColor: COLORS.divider },
     optionIcon: { width: 44, height: 44, borderRadius: 12, justifyContent: 'center', alignItems: 'center', marginRight: 16 },
-    optionText: { fontSize: 16, fontWeight: '700', color: '#374151' },
+    optionText: { fontSize: 16, fontWeight: '700', color: COLORS.textPrimary },
     cancelBtn: { marginTop: 12, borderBottomWidth: 0, justifyContent: 'center' },
-    cancelText: { fontSize: 16, fontWeight: '800', color: '#ef4444' },
+    cancelText: { fontSize: 16, fontWeight: '800', color: COLORS.expense },
 });
 
 export default AddTransactionScreen;

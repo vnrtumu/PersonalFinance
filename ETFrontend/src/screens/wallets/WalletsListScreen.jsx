@@ -2,15 +2,16 @@ import React from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, StatusBar } from 'react-native';
 import { PlusIcon, WalletIcon, ChevronRightIcon, CreditCardIcon, BanknoteIcon } from '../../assets/icons';
 import { useWallets } from '../../hooks/useWallets';
+import COLORS from '../../utils/theme';
 
 const WalletsListScreen = ({ navigation }) => {
     const { data: wallets, isLoading } = useWallets();
 
     const getWalletIcon = (type) => {
         switch (type.toLowerCase()) {
-            case 'credit_card': return <CreditCardIcon size={24} color="#6366f1" />;
-            case 'bank': return <BanknoteIcon size={24} color="#10b981" />;
-            default: return <WalletIcon size={24} color="#f59e0b" />;
+            case 'credit_card': return <CreditCardIcon size={24} color={COLORS.lavender} />;
+            case 'bank': return <BanknoteIcon size={24} color={COLORS.income} />;
+            default: return <WalletIcon size={24} color={COLORS.cream} />;
         }
     };
 
@@ -19,7 +20,7 @@ const WalletsListScreen = ({ navigation }) => {
             style={styles.walletCard}
             onPress={() => navigation.navigate('WalletDetail', { wallet: item })}
         >
-            <View style={[styles.iconContainer, { backgroundColor: item.type === 'credit_card' ? '#eef2ff' : item.type === 'bank' ? '#f0fdf4' : '#fffbeb' }]}>
+            <View style={[styles.iconContainer, { backgroundColor: item.type === 'credit_card' ? COLORS.lavenderBg : item.type === 'bank' ? COLORS.incomeBg : COLORS.creamBg }]}>
                 {getWalletIcon(item.type)}
             </View>
             <View style={styles.walletDetails}>
@@ -28,7 +29,7 @@ const WalletsListScreen = ({ navigation }) => {
             </View>
             <View style={styles.walletBalanceContainer}>
                 <Text style={styles.walletBalance}>${item.balance.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</Text>
-                <ChevronRightIcon size={18} color="#9ca3af" />
+                <ChevronRightIcon size={18} color={COLORS.textMuted} />
             </View>
         </TouchableOpacity>
     );
@@ -36,18 +37,18 @@ const WalletsListScreen = ({ navigation }) => {
     if (isLoading) {
         return (
             <View style={styles.loadingContainer}>
-                <ActivityIndicator size="large" color="#6366f1" />
+                <ActivityIndicator size="large" color={COLORS.primary} />
             </View>
         );
     }
 
     return (
         <View style={styles.container}>
-            <StatusBar barStyle="dark-content" />
+            <StatusBar barStyle="light-content" />
             <View style={styles.header}>
                 <Text style={styles.title}>Transactions</Text>
                 <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('AddWallet')}>
-                    <PlusIcon size={24} color="#6366f1" />
+                    <PlusIcon size={24} color={COLORS.primary} />
                 </TouchableOpacity>
             </View>
 
@@ -71,35 +72,32 @@ const WalletsListScreen = ({ navigation }) => {
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#f9fafb', padding: 24 },
+    container: { flex: 1, backgroundColor: COLORS.background, padding: 24 },
     header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 40, marginBottom: 24 },
-    title: { fontSize: 28, fontWeight: '800', color: '#111827' },
-    addButton: { width: 44, height: 44, borderRadius: 12, backgroundColor: '#fff', justifyContent: 'center', alignItems: 'center', shadowColor: '#000', shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.05, shadowRadius: 10, elevation: 2 },
-    totalBalanceSection: { backgroundColor: '#fff', borderRadius: 24, padding: 24, marginBottom: 30, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.03, shadowRadius: 15, elevation: 1 },
-    totalBalanceLabel: { fontSize: 13, fontWeight: '600', color: '#9ca3af', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 4 },
-    totalBalanceAmount: { fontSize: 32, fontWeight: '800', color: '#111827' },
+    title: { fontSize: 28, fontWeight: '800', color: COLORS.textPrimary },
+    addButton: { width: 44, height: 44, borderRadius: 12, backgroundColor: COLORS.surface, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: COLORS.divider },
+    totalBalanceSection: { backgroundColor: COLORS.surface, borderRadius: 24, padding: 24, marginBottom: 30, borderWidth: 1, borderColor: COLORS.divider },
+    totalBalanceLabel: { fontSize: 13, fontWeight: '600', color: COLORS.textMuted, textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 4 },
+    totalBalanceAmount: { fontSize: 32, fontWeight: '800', color: COLORS.textPrimary },
     listContent: { paddingBottom: 100 },
     walletCard: {
         flexDirection: 'row',
         alignItems: 'center',
-        backgroundColor: '#fff',
+        backgroundColor: COLORS.surface,
         padding: 16,
         borderRadius: 20,
         marginBottom: 12,
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.02,
-        shadowRadius: 10,
-        elevation: 1,
+        borderWidth: 1,
+        borderColor: COLORS.divider,
     },
     iconContainer: { width: 48, height: 48, borderRadius: 16, justifyContent: 'center', alignItems: 'center' },
     walletDetails: { flex: 1, marginLeft: 16 },
-    walletName: { fontSize: 16, fontWeight: '700', color: '#1f2937' },
-    walletType: { fontSize: 10, fontWeight: '800', color: '#9ca3af', marginTop: 2, letterSpacing: 0.5 },
+    walletName: { fontSize: 16, fontWeight: '700', color: COLORS.textPrimary },
+    walletType: { fontSize: 10, fontWeight: '800', color: COLORS.textMuted, marginTop: 2, letterSpacing: 0.5 },
     walletBalanceContainer: { flexDirection: 'row', alignItems: 'center' },
-    walletBalance: { fontSize: 16, fontWeight: '800', color: '#111827', marginRight: 8 },
-    loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
-    emptyText: { textAlign: 'center', color: '#9ca3af', marginTop: 40, fontSize: 14, fontWeight: '500' },
+    walletBalance: { fontSize: 16, fontWeight: '800', color: COLORS.textPrimary, marginRight: 8 },
+    loadingContainer: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: COLORS.background },
+    emptyText: { textAlign: 'center', color: COLORS.textMuted, marginTop: 40, fontSize: 14, fontWeight: '500' },
 });
 
 export default WalletsListScreen;

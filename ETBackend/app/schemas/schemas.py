@@ -9,6 +9,7 @@ class UserBase(BaseModel):
     name: str
     currency: Optional[str] = "INR"
     timezone: Optional[str] = "UTC"
+    avatar_url: Optional[str] = None
 
 class UserCreate(UserBase):
     password: str
@@ -17,6 +18,7 @@ class UserUpdate(BaseModel):
     name: Optional[str] = None
     currency: Optional[str] = None
     timezone: Optional[str] = None
+    avatar_url: Optional[str] = None
 
 class UserResponse(UserBase):
     id: int
@@ -38,6 +40,11 @@ class WalletBase(BaseModel):
     name: str
     type: WalletType
     balance: float = 0.0
+    last_4: Optional[str] = None
+    total_limit: Optional[float] = None
+    bill_date: Optional[int] = None
+    due_date: Optional[int] = None
+    additional_charges: Optional[float] = 0.0
 
 class WalletCreate(WalletBase):
     pass
