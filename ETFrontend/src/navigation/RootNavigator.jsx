@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { useAuthStore } from '../store/authStore';
@@ -12,6 +12,7 @@ import AddCategoryScreen from '../screens/categories/AddCategoryScreen';
 import ManageCategoriesScreen from '../screens/categories/ManageCategoriesScreen';
 import MyCardsScreen from '../screens/wallets/MyCardsScreen';
 import AddCardScreen from '../screens/wallets/AddCardScreen';
+import SplashScreen from '../components/SplashScreen';
 import COLORS from '../utils/theme';
 
 const Stack = createStackNavigator();
@@ -32,33 +33,37 @@ const AppTheme = {
 
 const RootNavigator = () => {
     const { isAuthenticated, initialize } = useAuthStore();
+    const [showSplash, setShowSplash] = useState(true);
 
     useEffect(() => {
         initialize();
     }, []);
 
     return (
-        <NavigationContainer theme={AppTheme}>
-            <Stack.Navigator screenOptions={{ headerShown: false }}>
-                {!isAuthenticated ? (
-                    <>
-                        <Stack.Screen name="Login" component={LoginScreen} />
-                        <Stack.Screen name="Register" component={RegisterScreen} />
-                    </>
-                ) : (
-                    <>
-                        <Stack.Screen name="Main" component={MainNavigator} />
-                        <Stack.Screen name="AddWallet" component={AddWalletScreen} />
-                        <Stack.Screen name="AddTransaction" component={AddTransactionScreen} />
-                        <Stack.Screen name="WalletDetail" component={WalletDetailScreen} />
-                        <Stack.Screen name="AddCategory" component={AddCategoryScreen} />
-                        <Stack.Screen name="ManageCategories" component={ManageCategoriesScreen} />
-                        <Stack.Screen name="MyCards" component={MyCardsScreen} />
-                        <Stack.Screen name="AddCard" component={AddCardScreen} />
-                    </>
-                )}
-            </Stack.Navigator>
-        </NavigationContainer>
+        <>
+            <NavigationContainer theme={AppTheme}>
+                <Stack.Navigator screenOptions={{ headerShown: false }}>
+                    {!isAuthenticated ? (
+                        <>
+                            <Stack.Screen name="Login" component={LoginScreen} />
+                            <Stack.Screen name="Register" component={RegisterScreen} />
+                        </>
+                    ) : (
+                        <>
+                            <Stack.Screen name="Main" component={MainNavigator} />
+                            <Stack.Screen name="AddWallet" component={AddWalletScreen} />
+                            <Stack.Screen name="AddTransaction" component={AddTransactionScreen} />
+                            <Stack.Screen name="WalletDetail" component={WalletDetailScreen} />
+                            <Stack.Screen name="AddCategory" component={AddCategoryScreen} />
+                            <Stack.Screen name="ManageCategories" component={ManageCategoriesScreen} />
+                            <Stack.Screen name="MyCards" component={MyCardsScreen} />
+                            <Stack.Screen name="AddCard" component={AddCardScreen} />
+                        </>
+                    )}
+                </Stack.Navigator>
+            </NavigationContainer>
+            {showSplash && <SplashScreen onFinish={() => setShowSplash(false)} />}
+        </>
     );
 };
 
