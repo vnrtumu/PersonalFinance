@@ -14,6 +14,7 @@ import MyCardsScreen from '../screens/wallets/MyCardsScreen';
 import AddCardScreen from '../screens/wallets/AddCardScreen';
 import SplashScreen from '../components/SplashScreen';
 import COLORS from '../utils/theme';
+import SplitNavigator from './SplitNavigator';
 
 const Stack = createStackNavigator();
 
@@ -58,6 +59,7 @@ const RootNavigator = () => {
                             <Stack.Screen name="ManageCategories" component={ManageCategoriesScreen} />
                             <Stack.Screen name="MyCards" component={MyCardsScreen} />
                             <Stack.Screen name="AddCard" component={AddCardScreen} />
+                            <Stack.Screen name="SplitApp" component={SplitNavigator} />
                         </>
                     )}
                 </Stack.Navigator>

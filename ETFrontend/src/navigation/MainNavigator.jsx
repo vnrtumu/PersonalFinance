@@ -78,7 +78,13 @@ const MainTabs = ({ navigation }) => {
                 />
                 <Tab.Screen
                     name="Split"
-                    component={SplitExpensesScreen}
+                    component={View}
+                    listeners={({ navigation }) => ({
+                        tabPress: (e) => {
+                            e.preventDefault();
+                            navigation.navigate('SplitApp');
+                        },
+                    })}
                     options={{
                         tabBarIcon: ({ focused }) => (
                             <UsersIcon size={24} color={focused ? COLORS.tabActive : COLORS.tabInactive} />
