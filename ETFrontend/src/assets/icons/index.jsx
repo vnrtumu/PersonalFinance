@@ -40,6 +40,9 @@ import ShieldCheckSvg from './svgs/shield-check.svg';
 import CameraSvg from './svgs/camera.svg';
 import ImageSvg from './svgs/image.svg';
 import PencilSvg from './svgs/pencil.svg';
+import EyeSvg from './svgs/eye.svg';
+import EyeOffSvg from './svgs/eye-off.svg';
+
 
 /**
  * Wrapper to ensure icons handle 'size' and 'color' props correctly.
@@ -92,6 +95,9 @@ export const ShieldCheckIcon = createIcon(ShieldCheckSvg);
 export const CameraIcon = createIcon(CameraSvg);
 export const ImageIcon = createIcon(ImageSvg);
 export const PencilIcon = createIcon(PencilSvg);
+export const EyeIcon = createIcon(EyeSvg);
+export const EyeOffIcon = createIcon(EyeOffSvg);
+
 
 export const IconMap = {
     tag: TagIcon,
@@ -123,4 +129,7 @@ export const IconMap = {
     camera: CameraIcon,
     image: ImageIcon,
     pencil: PencilIcon,
+    eye: EyeIcon,
+    'eye-off': EyeOffIcon,
+
 };

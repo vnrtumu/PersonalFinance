@@ -1,5 +1,7 @@
 import React, { useState, useMemo } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, StatusBar, ActivityIndicator, Image, Modal, Pressable, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, StatusBar, ActivityIndicator, Image, Modal, Pressable, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import {
     ChevronLeftIcon,
     PlusIcon,
@@ -147,7 +149,7 @@ const TransactionsListScreen = ({ navigation }) => {
 
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
-            <SafeAreaView style={styles.safeArea}>
+            <SafeAreaView style={styles.safeArea} edges={['top']}>
                 <StatusBar barStyle="light-content" />
 
                 <View style={styles.header}>

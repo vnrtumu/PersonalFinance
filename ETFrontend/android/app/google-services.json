@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "796234276900",
+    "project_id": "pfexpensetracker",
+    "storage_bucket": "pfexpensetracker.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:796234276900:android:e48ce4b00bf17d3dd878b1",
+        "android_client_info": {
+          "package_name": "com.etfrontend"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDnUSF4dWhxzL6TIKQYHOrprwCzFSz3iZk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

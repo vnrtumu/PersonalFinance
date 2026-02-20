@@ -73,3 +73,6 @@ yarn-error.log
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+# Firebase Secrets
+**/pfexpensetracker-firebase-adminsdk-fbsvc-*.json

@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, StatusBar, Dimensions, ActivityIndicator } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, StatusBar, Dimensions, ActivityIndicator } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { ChevronLeftIcon, PlusIcon, CreditCardIcon, TrashIcon, PencilIcon } from '../../assets/icons';
 import { useWallets } from '../../hooks/useWallets';
 import COLORS from '../../utils/theme';
@@ -64,7 +66,7 @@ const MyCardsScreen = ({ navigation }) => {
     const cards = wallets?.filter(w => w.type === 'credit_card') || [];
 
     return (
-        <SafeAreaView style={styles.safeArea}>
+        <SafeAreaView style={styles.safeArea} edges={['top']}>
             <StatusBar barStyle="light-content" />
             <View style={styles.header}>
                 <View style={styles.headerTop}>
@@ -110,7 +112,7 @@ const MyCardsScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     safeArea: { flex: 1, backgroundColor: COLORS.background },
-    header: { paddingHorizontal: 20, paddingTop: 10, paddingBottom: 20 },
+    header: { paddingHorizontal: 20, paddingTop: 15, paddingBottom: 20 },
     headerTop: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
     backButton: { width: 44, height: 44, borderRadius: 12, backgroundColor: COLORS.surface, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: COLORS.divider },
     title: { fontSize: 24, fontWeight: '800', color: COLORS.textPrimary },

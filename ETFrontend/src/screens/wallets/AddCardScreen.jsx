@@ -7,10 +7,10 @@ import {
     TouchableOpacity,
     Alert,
     ActivityIndicator,
-    SafeAreaView,
     StatusBar,
     ScrollView
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
     ChevronLeftIcon,
     CreditCardIcon,
@@ -63,7 +63,7 @@ const AddCardScreen = ({ navigation }) => {
     };
 
     return (
-        <SafeAreaView style={styles.safeArea}>
+        <SafeAreaView style={styles.safeArea} edges={['top']}>
             <StatusBar barStyle="light-content" />
 
             <View style={styles.header}>
@@ -193,7 +193,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 16,
-        paddingVertical: 12,
+        paddingVertical: 15,
     },
     backButton: { width: 44, height: 44, borderRadius: 12, backgroundColor: COLORS.surfaceElevated, justifyContent: 'center', alignItems: 'center' },
     title: { fontSize: 20, fontWeight: '800', color: COLORS.textPrimary },

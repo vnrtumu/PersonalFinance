@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, ActivityIndicator, Modal, Pressable, Alert } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { useAuthStore } from '../../store/authStore';
 import { UserIcon, BellIcon, ShieldIcon, WalletIcon, CircleHelpIcon, LogOutIcon, ChevronRightIcon, TagIcon, CreditCardIcon, CameraIcon, ImageIcon } from '../../assets/icons';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
@@ -64,111 +66,114 @@ const ProfileScreen = ({ navigation }) => {
     const avatarUrl = user?.avatar_url ? `${apiClient.defaults.baseURL.replace('/api/v1', '')}${user.avatar_url}` : null;
 
     return (
-        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-            <View style={styles.header}>
-                <Text style={styles.title}>Profile</Text>
-            </View>
-
-            <View style={styles.profileCard}>
-                <View style={styles.avatarContainer}>
-                    <TouchableOpacity
-                        style={styles.avatar}
-                        activeOpacity={0.8}
-                        onPress={() => setShowPickerModal(true)}
-                    >
-                        {uploadAvatarMutation.isPending ? (
-                            <ActivityIndicator color="#fff" />
-                        ) : avatarUrl ? (
-                            <Image source={{ uri: avatarUrl }} style={styles.avatarImage} />
-                        ) : (
-                            <Text style={styles.avatarText}>{user?.name?.charAt(0).toUpperCase()}</Text>
-                        )}
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.editBadge}
-                        onPress={() => setShowPickerModal(true)}
-                    >
-                        <CameraIcon size={14} color="#fff" />
-                    </TouchableOpacity>
+        <SafeAreaView style={styles.safeArea} edges={['top']}>
+            <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+                <View style={styles.header}>
+                    <Text style={styles.title}>Profile</Text>
                 </View>
-                <Text style={styles.userName}>{user?.name}</Text>
-                <Text style={styles.userEmail}>{user?.email}</Text>
-            </View>
 
-            {/* Image Picker Modal */}
-            <Modal
-                transparent={true}
-                visible={showPickerModal}
-                animationType="slide"
-                onRequestClose={() => setShowPickerModal(false)}
-            >
-                <Pressable style={styles.modalOverlay} onPress={() => setShowPickerModal(false)}>
-                    <View style={styles.pickerOptions}>
-                        <Text style={styles.modalTitle}>Update Profile Picture</Text>
-                        <TouchableOpacity style={styles.optionBtn} onPress={takePhoto}>
-                            <View style={[styles.optionIcon, { backgroundColor: COLORS.incomeBg }]}>
-                                <CameraIcon size={24} color={COLORS.income} />
-                            </View>
-                            <Text style={styles.optionText}>Take Photo</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.optionBtn} onPress={chooseFromLibrary}>
-                            <View style={[styles.optionIcon, { backgroundColor: COLORS.lavenderBg }]}>
-                                <ImageIcon size={24} color={COLORS.lavender} />
-                            </View>
-                            <Text style={styles.optionText}>Choose from Gallery</Text>
+                <View style={styles.profileCard}>
+                    <View style={styles.avatarContainer}>
+                        <TouchableOpacity
+                            style={styles.avatar}
+                            activeOpacity={0.8}
+                            onPress={() => setShowPickerModal(true)}
+                        >
+                            {uploadAvatarMutation.isPending ? (
+                                <ActivityIndicator color="#fff" />
+                            ) : avatarUrl ? (
+                                <Image source={{ uri: avatarUrl }} style={styles.avatarImage} />
+                            ) : (
+                                <Text style={styles.avatarText}>{user?.name?.charAt(0).toUpperCase()}</Text>
+                            )}
                         </TouchableOpacity>
                         <TouchableOpacity
-                            style={[styles.optionBtn, styles.cancelBtn]}
-                            onPress={() => setShowPickerModal(false)}
+                            style={styles.editBadge}
+                            onPress={() => setShowPickerModal(true)}
                         >
-                            <Text style={styles.cancelText}>Cancel</Text>
+                            <CameraIcon size={14} color="#fff" />
                         </TouchableOpacity>
                     </View>
-                </Pressable>
-            </Modal>
+                    <Text style={styles.userName}>{user?.name}</Text>
+                    <Text style={styles.userEmail}>{user?.email}</Text>
+                </View>
 
-            <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Account Settings</Text>
-                <MenuItem icon={UserIcon} title="Personal Information" />
-                <MenuItem
-                    icon={CreditCardIcon}
-                    title="My Cards"
-                    value="2 Cards"
-                    onPress={() => navigation.navigate('MyCards')}
-                />
-                <MenuItem icon={BellIcon} title="Notifications" color={COLORS.cream} />
-            </View>
+                {/* Image Picker Modal */}
+                <Modal
+                    transparent={true}
+                    visible={showPickerModal}
+                    animationType="slide"
+                    onRequestClose={() => setShowPickerModal(false)}
+                >
+                    <Pressable style={styles.modalOverlay} onPress={() => setShowPickerModal(false)}>
+                        <View style={styles.pickerOptions}>
+                            <Text style={styles.modalTitle}>Update Profile Picture</Text>
+                            <TouchableOpacity style={styles.optionBtn} onPress={takePhoto}>
+                                <View style={[styles.optionIcon, { backgroundColor: COLORS.incomeBg }]}>
+                                    <CameraIcon size={24} color={COLORS.income} />
+                                </View>
+                                <Text style={styles.optionText}>Take Photo</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.optionBtn} onPress={chooseFromLibrary}>
+                                <View style={[styles.optionIcon, { backgroundColor: COLORS.lavenderBg }]}>
+                                    <ImageIcon size={24} color={COLORS.lavender} />
+                                </View>
+                                <Text style={styles.optionText}>Choose from Gallery</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={[styles.optionBtn, styles.cancelBtn]}
+                                onPress={() => setShowPickerModal(false)}
+                            >
+                                <Text style={styles.cancelText}>Cancel</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </Pressable>
+                </Modal>
 
-            <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Master Data</Text>
-                <MenuItem
-                    icon={TagIcon}
-                    title="Categories"
-                    color={COLORS.primary}
-                    onPress={() => navigation.navigate('ManageCategories')}
-                />
-            </View>
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>Account Settings</Text>
+                    <MenuItem icon={UserIcon} title="Personal Information" />
+                    <MenuItem
+                        icon={CreditCardIcon}
+                        title="My Cards"
+                        value="2 Cards"
+                        onPress={() => navigation.navigate('MyCards')}
+                    />
+                    <MenuItem icon={BellIcon} title="Notifications" color={COLORS.cream} />
+                </View>
 
-            <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Security & Support</Text>
-                <MenuItem icon={ShieldIcon} title="Security" color={COLORS.income} />
-                <MenuItem icon={CircleHelpIcon} title="Help Center" color={COLORS.textSecondary} />
-            </View>
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>Master Data</Text>
+                    <MenuItem
+                        icon={TagIcon}
+                        title="Categories"
+                        color={COLORS.primary}
+                        onPress={() => navigation.navigate('ManageCategories')}
+                    />
+                </View>
 
-            <TouchableOpacity style={styles.logoutButton} onPress={logout}>
-                <LogOutIcon size={20} color={COLORS.expense} />
-                <Text style={styles.logoutText}>Log Out</Text>
-            </TouchableOpacity>
+                <View style={styles.section}>
+                    <Text style={styles.sectionTitle}>Security & Support</Text>
+                    <MenuItem icon={ShieldIcon} title="Security" color={COLORS.income} />
+                    <MenuItem icon={CircleHelpIcon} title="Help Center" color={COLORS.textSecondary} />
+                </View>
 
-            <Text style={styles.versionText}>Version 1.0.0 (2026)</Text>
-            <View style={{ height: 100 }} />
-        </ScrollView>
+                <TouchableOpacity style={styles.logoutButton} onPress={logout}>
+                    <LogOutIcon size={20} color={COLORS.expense} />
+                    <Text style={styles.logoutText}>Log Out</Text>
+                </TouchableOpacity>
+
+                <Text style={styles.versionText}>Version 1.0.0 (2026)</Text>
+                <View style={{ height: 100 }} />
+            </ScrollView>
+        </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: COLORS.background, padding: 20 },
-    header: { marginTop: 40, marginBottom: 20 },
+    safeArea: { flex: 1, backgroundColor: COLORS.background },
+    container: { flex: 1, paddingHorizontal: 20 },
+    header: { marginTop: 15, marginBottom: 20 },
     title: { fontSize: 28, fontWeight: '800', color: COLORS.textPrimary },
     profileCard: { backgroundColor: COLORS.surface, borderRadius: 24, padding: 24, alignItems: 'center', marginBottom: 30, borderWidth: 1, borderColor: COLORS.divider },
     avatarContainer: { position: 'relative', marginBottom: 16 },

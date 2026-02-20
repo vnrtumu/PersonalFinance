@@ -4,15 +4,13 @@ import {
     Text,
     StyleSheet,
     ScrollView,
-    SafeAreaView,
-    StatusBar,
-    ActivityIndicator,
     Dimensions,
     TouchableOpacity,
     Modal,
     TextInput,
     Pressable
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {
     TrendingUpIcon,
     ArrowUpRightIcon,
@@ -114,7 +112,7 @@ const AnalyticsDashboardScreen = () => {
     };
 
     return (
-        <SafeAreaView style={styles.safeArea}>
+        <SafeAreaView style={styles.safeArea} edges={['top']}>
             <StatusBar barStyle="light-content" />
 
             <View style={styles.header}>
@@ -348,7 +346,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 20,
-        paddingVertical: 16,
+        paddingVertical: 15,
     },
     title: { fontSize: 24, fontWeight: '800', color: COLORS.textPrimary },
     periodBadge: { backgroundColor: COLORS.surfaceElevated, paddingHorizontal: 12, paddingVertical: 6, borderRadius: 12 },
