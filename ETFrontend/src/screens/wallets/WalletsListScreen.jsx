@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, ActivityIndicator, StatusBar } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { PlusIcon, WalletIcon, ChevronRightIcon, CreditCardIcon, BanknoteIcon } from '../../assets/icons';
 import { useWallets } from '../../hooks/useWallets';
 import COLORS from '../../utils/theme';
@@ -43,37 +45,40 @@ const WalletsListScreen = ({ navigation }) => {
     }
 
     return (
-        <View style={styles.container}>
-            <StatusBar barStyle="light-content" />
-            <View style={styles.header}>
-                <Text style={styles.title}>Transactions</Text>
-                <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('AddWallet')}>
-                    <PlusIcon size={24} color={COLORS.primary} />
-                </TouchableOpacity>
-            </View>
+        <SafeAreaView style={styles.safeArea} edges={['top']}>
+            <View style={styles.container}>
+                <StatusBar barStyle="light-content" />
+                <View style={styles.header}>
+                    <Text style={styles.title}>Transactions</Text>
+                    <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('AddWallet')}>
+                        <PlusIcon size={24} color={COLORS.primary} />
+                    </TouchableOpacity>
+                </View>
 
-            <View style={styles.totalBalanceSection}>
-                <Text style={styles.totalBalanceLabel}>Total Assets</Text>
-                <Text style={styles.totalBalanceAmount}>
-                    ${wallets?.reduce((acc, curr) => acc + curr.balance, 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-                </Text>
-            </View>
+                <View style={styles.totalBalanceSection}>
+                    <Text style={styles.totalBalanceLabel}>Total Assets</Text>
+                    <Text style={styles.totalBalanceAmount}>
+                        ${wallets?.reduce((acc, curr) => acc + curr.balance, 0).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                    </Text>
+                </View>
 
-            <FlatList
-                data={wallets}
-                renderItem={renderWallet}
-                keyExtractor={(item) => item.id.toString()}
-                contentContainerStyle={styles.listContent}
-                showsVerticalScrollIndicator={false}
-                ListEmptyComponent={<Text style={styles.emptyText}>No wallets found. Add one to get started!</Text>}
-            />
-        </View>
+                <FlatList
+                    data={wallets}
+                    renderItem={renderWallet}
+                    keyExtractor={(item) => item.id.toString()}
+                    contentContainerStyle={styles.listContent}
+                    showsVerticalScrollIndicator={false}
+                    ListEmptyComponent={<Text style={styles.emptyText}>No wallets found. Add one to get started!</Text>}
+                />
+            </View>
+        </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: COLORS.background, padding: 24 },
-    header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 40, marginBottom: 24 },
+    safeArea: { flex: 1, backgroundColor: COLORS.background },
+    container: { flex: 1, backgroundColor: COLORS.background, paddingHorizontal: 24 },
+    header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 15, marginBottom: 24 },
     title: { fontSize: 28, fontWeight: '800', color: COLORS.textPrimary },
     addButton: { width: 44, height: 44, borderRadius: 12, backgroundColor: COLORS.surface, justifyContent: 'center', alignItems: 'center', borderWidth: 1, borderColor: COLORS.divider },
     totalBalanceSection: { backgroundColor: COLORS.surface, borderRadius: 24, padding: 24, marginBottom: 30, borderWidth: 1, borderColor: COLORS.divider },

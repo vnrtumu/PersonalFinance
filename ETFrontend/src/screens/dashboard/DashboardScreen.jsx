@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Modal, Pressable } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Modal, Pressable, Platform } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { APP_CONFIG } from '../../utils/config';
 import COLORS from '../../utils/theme';
 import {
@@ -27,164 +29,167 @@ const DashboardScreen = ({ navigation }) => {
     const recentTransactions = transactions?.slice(0, 5) || [];
 
     return (
-        <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-            {/* Receipt Modal */}
-            <Modal
-                visible={!!selectedReceipt}
-                transparent={true}
-                animationType="fade"
-                onRequestClose={() => setSelectedReceipt(null)}
-            >
-                <Pressable style={styles.modalOverlay} onPress={() => setSelectedReceipt(null)}>
-                    <View style={styles.modalContent}>
-                        <Image
-                            source={{ uri: `${APP_CONFIG.API_URL}${selectedReceipt}` }}
-                            style={styles.fullReceipt}
-                            resizeMode="contain"
-                        />
-                        <TouchableOpacity style={styles.closeBtn} onPress={() => setSelectedReceipt(null)}>
-                            <Text style={styles.closeBtnText}>Close</Text>
+        <SafeAreaView style={styles.safeArea} edges={['top']}>
+            <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+                {/* Receipt Modal */}
+                <Modal
+                    visible={!!selectedReceipt}
+                    transparent={true}
+                    animationType="fade"
+                    onRequestClose={() => setSelectedReceipt(null)}
+                >
+                    <Pressable style={styles.modalOverlay} onPress={() => setSelectedReceipt(null)}>
+                        <View style={styles.modalContent}>
+                            <Image
+                                source={{ uri: `${APP_CONFIG.API_URL}${selectedReceipt}` }}
+                                style={styles.fullReceipt}
+                                resizeMode="contain"
+                            />
+                            <TouchableOpacity style={styles.closeBtn} onPress={() => setSelectedReceipt(null)}>
+                                <Text style={styles.closeBtnText}>Close</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </Pressable>
+                </Modal>
+                {/* Header */}
+                <View style={styles.header}>
+                    <View>
+                        <Text style={styles.greeting}>Hello, {user?.name || 'User'} 👋</Text>
+                        <Text style={styles.subtitle}>Your financial overview</Text>
+                    </View>
+                    <View style={styles.headerActions}>
+                        <TouchableOpacity
+                            style={styles.addBtn}
+                            onPress={() => navigation.navigate('AddTransaction')}
+                        >
+                            <PlusIcon size={24} color={COLORS.buttonText} />
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.profileBtn}
+                            onPress={() => navigation.navigate('Profile')}
+                        >
+                            {user?.avatar_url ? (
+                                <Image
+                                    source={{ uri: `${APP_CONFIG.API_URL.replace('/api/v1', '')}${user.avatar_url}` }}
+                                    style={styles.avatarImage}
+                                />
+                            ) : (
+                                <Text style={styles.profileInitial}>{user?.name?.charAt(0).toUpperCase() || 'U'}</Text>
+                            )}
                         </TouchableOpacity>
                     </View>
-                </Pressable>
-            </Modal>
-            {/* Header */}
-            <View style={styles.header}>
-                <View>
-                    <Text style={styles.greeting}>Hello, {user?.name || 'User'} 👋</Text>
-                    <Text style={styles.subtitle}>Your financial overview</Text>
                 </View>
-                <View style={styles.headerActions}>
-                    <TouchableOpacity
-                        style={styles.addBtn}
-                        onPress={() => navigation.navigate('AddTransaction')}
-                    >
-                        <PlusIcon size={24} color={COLORS.buttonText} />
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={styles.profileBtn}
-                        onPress={() => navigation.navigate('Profile')}
-                    >
-                        {user?.avatar_url ? (
-                            <Image
-                                source={{ uri: `${APP_CONFIG.API_URL.replace('/api/v1', '')}${user.avatar_url}` }}
-                                style={styles.avatarImage}
-                            />
-                        ) : (
-                            <Text style={styles.profileInitial}>{user?.name?.charAt(0).toUpperCase() || 'U'}</Text>
-                        )}
-                    </TouchableOpacity>
-                </View>
-            </View>
 
-            {/* Balance Card */}
-            <View style={[
-                styles.balanceCard,
-                { backgroundColor: (summary?.total_balance >= 0) ? COLORS.primary : COLORS.expense }
-            ]}>
-                <Text style={styles.balanceLabel}>Total Balance (This Month)</Text>
-                <Text style={styles.balanceAmount}>
-                    {(summary?.total_balance >= 0) ? '' : '-'}${Math.abs(summary?.total_balance || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
-                </Text>
-                <View style={styles.balanceRow}>
-                    <View style={styles.balanceItem}>
-                        <View style={[styles.balanceIcon, { backgroundColor: 'rgba(255,255,255,0.2)' }]}>
-                            <ArrowUpRightIcon size={16} color="#fff" />
-                        </View>
-                        <View>
-                            <Text style={styles.balanceItemLabel}>Income</Text>
-                            <Text style={[styles.balanceItemValue, { color: '#fff' }]}>
-                                +${summary?.total_income?.toLocaleString(undefined, { minimumFractionDigits: 2 }) || '0.00'}
-                            </Text>
-                        </View>
-                    </View>
-                    <View style={styles.balanceItem}>
-                        <View style={[styles.balanceIcon, { backgroundColor: 'rgba(255,255,255,0.2)' }]}>
-                            <ArrowDownLeftIcon size={16} color="#fff" />
-                        </View>
-                        <View>
-                            <Text style={styles.balanceItemLabel}>Expenses</Text>
-                            <Text style={[styles.balanceItemValue, { color: '#fff' }]}>
-                                -${summary?.total_expenses?.toLocaleString(undefined, { minimumFractionDigits: 2 }) || '0.00'}
-                            </Text>
-                        </View>
-                    </View>
-                </View>
-            </View>
-
-            {/* Quick Stats */}
-            <View style={styles.statsRow}>
-                <View style={styles.statCard}>
-                    <TrendingUpIcon size={24} color={COLORS.primary} />
-                    <Text style={styles.statValue}>{summary?.wallet_count || 0}</Text>
-                    <Text style={styles.statLabel}>Wallets</Text>
-                </View>
-                <View style={styles.statCard}>
-                    <ClockIcon size={24} color={COLORS.cream} />
-                    <Text style={styles.statValue}>{transactions?.length || 0}</Text>
-                    <Text style={styles.statLabel}>Transactions</Text>
-                </View>
-            </View>
-
-            {/* Recent Transactions */}
-            <View style={styles.sectionHeader}>
-                <Text style={styles.sectionTitle}>Recent Transactions</Text>
-                <TouchableOpacity>
-                    <Text style={styles.seeAll}>See All</Text>
-                </TouchableOpacity>
-            </View>
-
-            {recentTransactions.length === 0 ? (
-                <Text style={styles.emptyText}>No transactions yet</Text>
-            ) : (
-                recentTransactions.map((item, index) => {
-                    const category = categories?.find(c => c.id === item.category_id);
-                    return (
-                        <TouchableOpacity
-                            key={item.id || index}
-                            style={styles.transactionItem}
-                            onPress={() => item.receipt_url && setSelectedReceipt(item.receipt_url)}
-                        >
-                            <View style={[styles.transactionIcon, { backgroundColor: item.type === 'income' ? COLORS.incomeBg : COLORS.expenseBg }]}>
-                                {item.type === 'income' ? (
-                                    <ArrowUpRightIcon size={20} color={COLORS.income} />
-                                ) : (
-                                    <ArrowDownLeftIcon size={20} color={COLORS.expense} />
-                                )}
+                {/* Balance Card */}
+                <View style={[
+                    styles.balanceCard,
+                    { backgroundColor: (summary?.total_balance >= 0) ? COLORS.primary : COLORS.expense }
+                ]}>
+                    <Text style={styles.balanceLabel}>Total Balance (This Month)</Text>
+                    <Text style={styles.balanceAmount}>
+                        {(summary?.total_balance >= 0) ? '' : '-'}${Math.abs(summary?.total_balance || 0).toLocaleString(undefined, { minimumFractionDigits: 2 })}
+                    </Text>
+                    <View style={styles.balanceRow}>
+                        <View style={styles.balanceItem}>
+                            <View style={[styles.balanceIcon, { backgroundColor: 'rgba(255,255,255,0.2)' }]}>
+                                <ArrowUpRightIcon size={16} color="#fff" />
                             </View>
-                            <View style={styles.transactionDetails}>
-                                <Text style={styles.transactionNote}>{item.note || 'No description'}</Text>
-                                <View style={styles.transactionMeta}>
-                                    <View style={styles.categoryBadge}>
-                                        <TagIcon size={12} color={COLORS.textSecondary} />
-                                        <Text style={styles.categoryText}>{category?.name || 'Category'}</Text>
-                                    </View>
-                                    {item.receipt_url && (
-                                        <View style={styles.receiptIndicator}>
-                                            <FileTextIcon size={12} color={COLORS.primary} />
-                                            <Text style={styles.receiptText}>Receipt</Text>
-                                        </View>
+                            <View>
+                                <Text style={styles.balanceItemLabel}>Income</Text>
+                                <Text style={[styles.balanceItemValue, { color: '#fff' }]}>
+                                    +${summary?.total_income?.toLocaleString(undefined, { minimumFractionDigits: 2 }) || '0.00'}
+                                </Text>
+                            </View>
+                        </View>
+                        <View style={styles.balanceItem}>
+                            <View style={[styles.balanceIcon, { backgroundColor: 'rgba(255,255,255,0.2)' }]}>
+                                <ArrowDownLeftIcon size={16} color="#fff" />
+                            </View>
+                            <View>
+                                <Text style={styles.balanceItemLabel}>Expenses</Text>
+                                <Text style={[styles.balanceItemValue, { color: '#fff' }]}>
+                                    -${summary?.total_expenses?.toLocaleString(undefined, { minimumFractionDigits: 2 }) || '0.00'}
+                                </Text>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+
+                {/* Quick Stats */}
+                <View style={styles.statsRow}>
+                    <View style={styles.statCard}>
+                        <TrendingUpIcon size={24} color={COLORS.primary} />
+                        <Text style={styles.statValue}>{summary?.wallet_count || 0}</Text>
+                        <Text style={styles.statLabel}>Wallets</Text>
+                    </View>
+                    <View style={styles.statCard}>
+                        <ClockIcon size={24} color={COLORS.cream} />
+                        <Text style={styles.statValue}>{transactions?.length || 0}</Text>
+                        <Text style={styles.statLabel}>Transactions</Text>
+                    </View>
+                </View>
+
+                {/* Recent Transactions */}
+                <View style={styles.sectionHeader}>
+                    <Text style={styles.sectionTitle}>Recent Transactions</Text>
+                    <TouchableOpacity>
+                        <Text style={styles.seeAll}>See All</Text>
+                    </TouchableOpacity>
+                </View>
+
+                {recentTransactions.length === 0 ? (
+                    <Text style={styles.emptyText}>No transactions yet</Text>
+                ) : (
+                    recentTransactions.map((item, index) => {
+                        const category = categories?.find(c => c.id === item.category_id);
+                        return (
+                            <TouchableOpacity
+                                key={item.id || index}
+                                style={styles.transactionItem}
+                                onPress={() => item.receipt_url && setSelectedReceipt(item.receipt_url)}
+                            >
+                                <View style={[styles.transactionIcon, { backgroundColor: item.type === 'income' ? COLORS.incomeBg : COLORS.expenseBg }]}>
+                                    {item.type === 'income' ? (
+                                        <ArrowUpRightIcon size={20} color={COLORS.income} />
+                                    ) : (
+                                        <ArrowDownLeftIcon size={20} color={COLORS.expense} />
                                     )}
                                 </View>
-                            </View>
-                            <View style={styles.amountContainer}>
-                                <Text style={[styles.transactionAmount, { color: item.type === 'income' ? COLORS.income : COLORS.expense }]}>
-                                    {item.type === 'income' ? '+' : '-'}${item.amount?.toFixed(2)}
-                                </Text>
-                                <Text style={styles.transactionDate}>{new Date(item.date).toLocaleDateString()}</Text>
-                            </View>
-                        </TouchableOpacity>
-                    );
-                })
-            )}
-            <View style={{ height: 120 }} />
-        </ScrollView>
+                                <View style={styles.transactionDetails}>
+                                    <Text style={styles.transactionNote}>{item.note || 'No description'}</Text>
+                                    <View style={styles.transactionMeta}>
+                                        <View style={styles.categoryBadge}>
+                                            <TagIcon size={12} color={COLORS.textSecondary} />
+                                            <Text style={styles.categoryText}>{category?.name || 'Category'}</Text>
+                                        </View>
+                                        {item.receipt_url && (
+                                            <View style={styles.receiptIndicator}>
+                                                <FileTextIcon size={12} color={COLORS.primary} />
+                                                <Text style={styles.receiptText}>Receipt</Text>
+                                            </View>
+                                        )}
+                                    </View>
+                                </View>
+                                <View style={styles.amountContainer}>
+                                    <Text style={[styles.transactionAmount, { color: item.type === 'income' ? COLORS.income : COLORS.expense }]}>
+                                        {item.type === 'income' ? '+' : '-'}${item.amount?.toFixed(2)}
+                                    </Text>
+                                    <Text style={styles.transactionDate}>{new Date(item.date).toLocaleDateString()}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        );
+                    })
+                )}
+                <View style={{ height: 120 }} />
+            </ScrollView>
+        </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: COLORS.background, padding: 20 },
-    header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 40, marginBottom: 24 },
+    safeArea: { flex: 1, backgroundColor: COLORS.background },
+    container: { flex: 1, paddingHorizontal: 20 },
+    header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 15, marginBottom: 24 },
     headerActions: { flexDirection: 'row', alignItems: 'center' },
     addBtn: { width: 44, height: 44, borderRadius: 22, backgroundColor: COLORS.primary, justifyContent: 'center', alignItems: 'center', marginRight: 12 },
     greeting: { fontSize: 24, fontWeight: '800', color: COLORS.textPrimary },

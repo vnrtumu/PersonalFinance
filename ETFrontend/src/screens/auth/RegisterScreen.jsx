@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { useRegister } from '../../hooks/useAuth';
 import COLORS from '../../utils/theme';
 
@@ -33,57 +35,60 @@ const RegisterScreen = ({ navigation }) => {
     };
 
     return (
-        <ScrollView contentContainerStyle={styles.container}>
-            <Text style={styles.title}>Create Account</Text>
-            <Text style={styles.subtitle}>Join us and track your expenses</Text>
+        <SafeAreaView style={styles.safeArea} edges={['top']}>
+            <ScrollView contentContainerStyle={styles.container}>
+                <Text style={styles.title}>Create Account</Text>
+                <Text style={styles.subtitle}>Join us and track your expenses</Text>
 
-            <View style={styles.inputContainer}>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Full Name"
-                    placeholderTextColor={COLORS.textMuted}
-                    value={name}
-                    onChangeText={setName}
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Email"
-                    placeholderTextColor={COLORS.textMuted}
-                    value={email}
-                    onChangeText={setEmail}
-                    autoCapitalize="none"
-                    keyboardType="email-address"
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Password"
-                    placeholderTextColor={COLORS.textMuted}
-                    value={password}
-                    onChangeText={setPassword}
-                    secureTextEntry
-                />
-                <TextInput
-                    style={styles.input}
-                    placeholder="Confirm Password"
-                    placeholderTextColor={COLORS.textMuted}
-                    value={confirmPassword}
-                    onChangeText={setConfirmPassword}
-                    secureTextEntry
-                />
-            </View>
+                <View style={styles.inputContainer}>
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Full Name"
+                        placeholderTextColor={COLORS.textMuted}
+                        value={name}
+                        onChangeText={setName}
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Email"
+                        placeholderTextColor={COLORS.textMuted}
+                        value={email}
+                        onChangeText={setEmail}
+                        autoCapitalize="none"
+                        keyboardType="email-address"
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Password"
+                        placeholderTextColor={COLORS.textMuted}
+                        value={password}
+                        onChangeText={setPassword}
+                        secureTextEntry
+                    />
+                    <TextInput
+                        style={styles.input}
+                        placeholder="Confirm Password"
+                        placeholderTextColor={COLORS.textMuted}
+                        value={confirmPassword}
+                        onChangeText={setConfirmPassword}
+                        secureTextEntry
+                    />
+                </View>
 
-            <TouchableOpacity style={styles.button} onPress={handleRegister} disabled={registerMutation.isPending}>
-                {registerMutation.isPending ? <ActivityIndicator color={COLORS.buttonText} /> : <Text style={styles.buttonText}>Register</Text>}
-            </TouchableOpacity>
+                <TouchableOpacity style={styles.button} onPress={handleRegister} disabled={registerMutation.isPending}>
+                    {registerMutation.isPending ? <ActivityIndicator color={COLORS.buttonText} /> : <Text style={styles.buttonText}>Register</Text>}
+                </TouchableOpacity>
 
-            <TouchableOpacity onPress={() => navigation.navigate('Login')}>
-                <Text style={styles.linkText}>Already have an account? Login</Text>
-            </TouchableOpacity>
-        </ScrollView>
+                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                    <Text style={styles.linkText}>Already have an account? Login</Text>
+                </TouchableOpacity>
+            </ScrollView>
+        </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
+    safeArea: { flex: 1, backgroundColor: COLORS.background },
     container: { flexGrow: 1, justifyContent: 'center', padding: 20, backgroundColor: COLORS.background },
     title: { fontSize: 32, fontWeight: 'bold', color: COLORS.textPrimary, textAlign: 'center' },
     subtitle: { fontSize: 16, color: COLORS.textSecondary, textAlign: 'center', marginBottom: 40 },

@@ -1,5 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import { UsersIcon, PlusIcon, ChevronRightIcon } from '../../assets/icons';
 import COLORS from '../../utils/theme';
 
@@ -29,41 +31,44 @@ const SplitExpensesScreen = () => {
     );
 
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.title}>Split Expenses</Text>
-                <TouchableOpacity style={styles.addButton}>
-                    <PlusIcon size={24} color={COLORS.buttonText} />
-                </TouchableOpacity>
-            </View>
-
-            <View style={styles.summaryCard}>
-                <View style={styles.summaryItem}>
-                    <Text style={styles.summaryLabel}>You are owed</Text>
-                    <Text style={[styles.summaryValue, { color: COLORS.income }]}>$1,200.00</Text>
+        <SafeAreaView style={styles.safeArea} edges={['top']}>
+            <View style={styles.container}>
+                <View style={styles.header}>
+                    <Text style={styles.title}>Split Expenses</Text>
+                    <TouchableOpacity style={styles.addButton}>
+                        <PlusIcon size={24} color={COLORS.buttonText} />
+                    </TouchableOpacity>
                 </View>
-                <View style={styles.divider} />
-                <View style={styles.summaryItem}>
-                    <Text style={styles.summaryLabel}>You owe</Text>
-                    <Text style={[styles.summaryValue, { color: COLORS.expense }]}>$450.00</Text>
-                </View>
-            </View>
 
-            <Text style={styles.sectionTitle}>Groups</Text>
-            <FlatList
-                data={groups}
-                renderItem={renderGroup}
-                keyExtractor={(item) => item.id}
-                contentContainerStyle={styles.listContent}
-                showsVerticalScrollIndicator={false}
-            />
-        </View>
+                <View style={styles.summaryCard}>
+                    <View style={styles.summaryItem}>
+                        <Text style={styles.summaryLabel}>You are owed</Text>
+                        <Text style={[styles.summaryValue, { color: COLORS.income }]}>$1,200.00</Text>
+                    </View>
+                    <View style={styles.divider} />
+                    <View style={styles.summaryItem}>
+                        <Text style={styles.summaryLabel}>You owe</Text>
+                        <Text style={[styles.summaryValue, { color: COLORS.expense }]}>$450.00</Text>
+                    </View>
+                </View>
+
+                <Text style={styles.sectionTitle}>Groups</Text>
+                <FlatList
+                    data={groups}
+                    renderItem={renderGroup}
+                    keyExtractor={(item) => item.id}
+                    contentContainerStyle={styles.listContent}
+                    showsVerticalScrollIndicator={false}
+                />
+            </View>
+        </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: COLORS.background, padding: 20 },
-    header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 40, marginBottom: 20 },
+    safeArea: { flex: 1, backgroundColor: COLORS.background },
+    container: { flex: 1, backgroundColor: COLORS.background, paddingHorizontal: 20 },
+    header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 15, marginBottom: 20 },
     title: { fontSize: 28, fontWeight: '800', color: COLORS.textPrimary },
     addButton: { backgroundColor: COLORS.primary, width: 44, height: 44, borderRadius: 12, justifyContent: 'center', alignItems: 'center', shadowColor: COLORS.primary, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 5 },
     summaryCard: { backgroundColor: COLORS.surface, borderRadius: 20, padding: 20, flexDirection: 'row', marginBottom: 30, borderWidth: 1, borderColor: COLORS.divider },

@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert, ActivityIndicator, Modal, Pressable, SafeAreaView, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert, ActivityIndicator, Modal, Pressable, StatusBar } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import {
     ArrowUpRightIcon as ArrowUpCircle,
     ArrowDownLeftIcon as ArrowDownCircle,
@@ -111,7 +113,7 @@ const AddTransactionScreen = ({ navigation, route }) => {
     };
 
     return (
-        <SafeAreaView style={styles.safeArea}>
+        <SafeAreaView style={styles.safeArea} edges={['top']}>
             <StatusBar barStyle="light-content" />
 
             {/* Header */}
@@ -263,7 +265,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 16,
-        paddingVertical: 12,
+        paddingVertical: 15,
         backgroundColor: COLORS.background
     },
     backBtn: { width: 40, height: 40, borderRadius: 20, backgroundColor: COLORS.surfaceElevated, justifyContent: 'center', alignItems: 'center' },

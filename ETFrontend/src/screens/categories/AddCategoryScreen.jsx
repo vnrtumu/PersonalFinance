@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert, ActivityIndicator, SafeAreaView, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView, Alert, ActivityIndicator, StatusBar } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+
 import {
     ChevronLeftIcon,
     ArrowUpRightIcon,
@@ -58,7 +60,7 @@ const AddCategoryScreen = ({ navigation, route }) => {
     };
 
     return (
-        <SafeAreaView style={styles.safeArea}>
+        <SafeAreaView style={styles.safeArea} edges={['top']}>
             <StatusBar barStyle="light-content" />
 
             <View style={styles.header}>
@@ -149,7 +151,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: 16,
-        paddingVertical: 12,
+        paddingVertical: 15,
         backgroundColor: COLORS.background
     },
     backButton: { width: 40, height: 40, borderRadius: 20, backgroundColor: COLORS.surfaceElevated, justifyContent: 'center', alignItems: 'center' },
