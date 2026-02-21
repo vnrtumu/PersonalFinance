@@ -11,7 +11,8 @@
     "ios:prod": "node -e \"fs.writeFileSync('src/utils/env.js', 'export const ENV = \\'prod\\';\\n')\" && react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "clean": "cd android && ./gradlew clean && cd .."
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^2.2.0",
@@ -30,6 +31,7 @@
     "react-native-screens": "^4.23.0",
     "react-native-svg": "^15.15.3",
     "react-native-vector-icons": "^10.3.0",
+    "react-native-video": "^6.19.0",
     "zustand": "^5.0.11"
   },
   "devDependencies": {
