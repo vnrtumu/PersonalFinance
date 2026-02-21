@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, KeyboardAvoidingView, Platform, ScrollView, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useLogin } from '../../hooks/useAuth';
@@ -66,6 +66,11 @@ const LoginScreen = ({ navigation }) => {
                     contentContainerStyle={styles.scrollContent}
                     showsVerticalScrollIndicator={false}
                 >
+                    <Image
+                        source={require('../../assets/images/Innerlogo.png')}
+                        style={styles.logo}
+                        resizeMode="contain"
+                    />
                     <Text style={styles.title}>Vaulto</Text>
                     <Text style={styles.subtitle}>Manage your finances effortlessly</Text>
 
@@ -129,6 +134,7 @@ const styles = StyleSheet.create({
     safeArea: { flex: 1, backgroundColor: COLORS.background },
     container: { flex: 1 },
     scrollContent: { padding: 20, flexGrow: 1, justifyContent: 'center' },
+    logo: { width: 250, height: 250, alignSelf: 'center' },
     title: { fontSize: 32, fontWeight: 'bold', color: COLORS.textPrimary, textAlign: 'center' },
     subtitle: { fontSize: 16, color: COLORS.textSecondary, textAlign: 'center', marginBottom: 40 },
     inputContainer: { marginBottom: 20 },

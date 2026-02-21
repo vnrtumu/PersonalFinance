@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert, ActivityIndicator, ScrollView, Image } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { useRegister } from '../../hooks/useAuth';
@@ -37,6 +37,11 @@ const RegisterScreen = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.safeArea} edges={['top']}>
             <ScrollView contentContainerStyle={styles.container}>
+                <Image
+                    source={require('../../assets/images/Innerlogo.png')}
+                    style={styles.logo}
+                    resizeMode="contain"
+                />
                 <Text style={styles.title}>Create Account</Text>
                 <Text style={styles.subtitle}>Join us and track your expenses</Text>
 
@@ -90,6 +95,7 @@ const RegisterScreen = ({ navigation }) => {
 const styles = StyleSheet.create({
     safeArea: { flex: 1, backgroundColor: COLORS.background },
     container: { flexGrow: 1, justifyContent: 'center', padding: 20, backgroundColor: COLORS.background },
+    logo: { width: 250, height: 250, alignSelf: 'center' },
     title: { fontSize: 32, fontWeight: 'bold', color: COLORS.textPrimary, textAlign: 'center' },
     subtitle: { fontSize: 16, color: COLORS.textSecondary, textAlign: 'center', marginBottom: 40 },
     inputContainer: { marginBottom: 20 },

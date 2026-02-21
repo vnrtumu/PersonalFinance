@@ -1,6 +1,6 @@
 #!/bin/bash
 set -e
-LOGO="logo2.png"
+LOGO="src/assets/images/Innerlogo.png"
 ANDROID_RES="android/app/src/main/res"
 IOS_ICONS="ios/ETFrontend/Images.xcassets/AppIcon.appiconset"
 
