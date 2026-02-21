@@ -15,6 +15,7 @@ import XSvg from './svgs/x.svg';
 import CheckSvg from './svgs/check.svg';
 import ChevronRightSvg from './svgs/chevron-right.svg';
 import ChevronLeftSvg from './svgs/chevron-left.svg';
+import ChevronDownSvg from './svgs/chevron-down.svg';
 import ArrowUpRightSvg from './svgs/arrow-up-right.svg';
 import ArrowDownLeftSvg from './svgs/arrow-down-left.svg';
 import CreditCardSvg from './svgs/credit-card.svg';
@@ -42,6 +43,8 @@ import ImageSvg from './svgs/image.svg';
 import PencilSvg from './svgs/pencil.svg';
 import EyeSvg from './svgs/eye.svg';
 import EyeOffSvg from './svgs/eye-off.svg';
+import SearchSvg from './svgs/search.svg';
+import PinSvg from './svgs/pin.svg';
 
 
 /**
@@ -70,6 +73,7 @@ export const XIcon = createIcon(XSvg);
 export const CheckIcon = createIcon(CheckSvg);
 export const ChevronRightIcon = createIcon(ChevronRightSvg);
 export const ChevronLeftIcon = createIcon(ChevronLeftSvg);
+export const ChevronDownIcon = createIcon(ChevronDownSvg);
 export const ArrowUpRightIcon = createIcon(ArrowUpRightSvg);
 export const ArrowDownLeftIcon = createIcon(ArrowDownLeftSvg);
 export const CreditCardIcon = createIcon(CreditCardSvg);
@@ -97,6 +101,8 @@ export const ImageIcon = createIcon(ImageSvg);
 export const PencilIcon = createIcon(PencilSvg);
 export const EyeIcon = createIcon(EyeSvg);
 export const EyeOffIcon = createIcon(EyeOffSvg);
+export const SearchIcon = createIcon(SearchSvg);
+export const PinIcon = createIcon(PinSvg);
 
 
 export const IconMap = {
@@ -131,5 +137,7 @@ export const IconMap = {
     pencil: PencilIcon,
     eye: EyeIcon,
     'eye-off': EyeOffIcon,
-
+    search: SearchIcon,
+    pin: PinIcon,
+    'chevron-down': ChevronDownIcon,
 };

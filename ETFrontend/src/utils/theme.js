@@ -54,4 +54,25 @@ const COLORS = {
     transparent: 'transparent',
 };
 
+// Split Module Specific Theme (Vibrant & Clean)
+export const SPLIT_COLORS = {
+    primary: '#FFD700', // Gold/Yellow accent
+    primaryDark: '#B8860B',
+    background: '#FFFFFF',
+    surface: '#F8F9FA',
+    cardDark: '#1E1E2D',
+    cardLight: '#FFFFFF',
+    textPrimary: '#1E1E2D',
+    textSecondary: '#6C757D',
+    textWhite: '#FFFFFF',
+    success: '#2ECC71',
+    successLight: '#E8F8F5',
+    error: '#E74C3C',
+    errorLight: '#FDEDEC',
+    divider: '#F1F3F5',
+    shadow: 'rgba(0,0,0,0.1)',
+    pinned: '#FFD700',
+    headerBlack: '#121212',
+};
+
 export default COLORS;

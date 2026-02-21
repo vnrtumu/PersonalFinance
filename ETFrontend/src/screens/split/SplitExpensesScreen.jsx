@@ -1,90 +1,308 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, FlatList } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity, FlatList, Image, ScrollView, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-import { UsersIcon, PlusIcon, ChevronRightIcon } from '../../assets/icons';
-import COLORS from '../../utils/theme';
+import {
+    UsersIcon,
+    PlusIcon,
+    SearchIcon,
+    PinIcon,
+    UserIcon,
+    ClockIcon
+} from '../../assets/icons';
+import { SPLIT_COLORS } from '../../utils/theme';
+import { useNavigation } from '@react-navigation/native';
 
 const SplitExpensesScreen = () => {
-    const groups = [
-        { id: '1', name: 'Apartment', balance: -450, members: 3 },
-        { id: '2', name: 'Trip to Goa', balance: 1200, members: 5 },
-        { id: '3', name: 'Dinner Party', balance: 0, members: 8 },
+    const navigation = useNavigation();
+    const [searchQuery, setSearchQuery] = useState('');
+    const [hasGroups, setHasGroups] = useState(true); // Toggle this to see empty state
+
+    const quickAccessGroups = [
+        {
+            id: '1',
+            name: 'Paris Summer Vacation',
+            friends: 4,
+            expenses: 4,
+            balance: '+$538.83',
+            type: 'owed',
+            isPinned: true
+        },
     ];
 
-    const renderGroup = ({ item }) => (
-        <TouchableOpacity style={styles.groupCard}>
-            <View style={styles.groupIcon}>
-                <UsersIcon size={24} color={COLORS.primary} />
+    const allGroups = [
+        {
+            id: '2',
+            name: 'Avenger: Endgame Cinema',
+            friends: 8,
+            expenses: 1,
+            balance: '-$43.80',
+            type: 'owe',
+            isPinned: false
+        },
+        {
+            id: '3',
+            name: "Disney's Land",
+            friends: 4,
+            expenses: 3,
+            balance: 'Settled!',
+            type: 'settled',
+            isPinned: false
+        },
+        {
+            id: '4',
+            name: 'Paris Vacation',
+            friends: 4,
+            expenses: 1,
+            balance: 'Settled!',
+            type: 'settled',
+            isPinned: false
+        },
+    ];
+
+    const renderHeader = () => (
+        <View style={styles.header}>
+            <Text style={styles.headerTitle}>Groups</Text>
+            <View style={styles.headerActions}>
+                <TouchableOpacity style={styles.headerActionBtn}>
+                    <SearchIcon size={24} color={SPLIT_COLORS.textPrimary} />
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.plusBtn}
+                    onPress={() => navigation.navigate('CreateGroup')}
+                >
+                    <PlusIcon size={24} color={SPLIT_COLORS.textPrimary} />
+                </TouchableOpacity>
             </View>
-            <View style={styles.groupInfo}>
+        </View>
+    );
+
+    const GroupCard = ({ item, isQuickAccess = false }) => (
+        <TouchableOpacity
+            style={[styles.card, isQuickAccess && styles.quickAccessCard]}
+            onPress={() => navigation.navigate('GroupDetail', { groupId: item.id, groupName: item.name })}
+        >
+            <View style={styles.cardHeader}>
                 <Text style={styles.groupName}>{item.name}</Text>
-                <Text style={styles.groupMembers}>{item.members} members</Text>
+                {item.isPinned && <PinIcon size={16} color={SPLIT_COLORS.textSecondary} />}
             </View>
-            <View style={styles.balanceInfo}>
-                <Text style={[styles.balanceAmount, { color: item.balance < 0 ? COLORS.expense : item.balance > 0 ? COLORS.income : COLORS.textSecondary }]}>
-                    {item.balance === 0 ? 'Settled' : `${item.balance < 0 ? '-' : '+'}$${Math.abs(item.balance)}`}
+
+            <View style={styles.cardFooter}>
+                <View style={styles.cardStats}>
+                    <View style={styles.statItem}>
+                        <UserIcon size={14} color={SPLIT_COLORS.textSecondary} />
+                        <Text style={styles.statText}>{item.friends} friends</Text>
+                    </View>
+                    <View style={styles.statItem}>
+                        <ClockIcon size={14} color={SPLIT_COLORS.textSecondary} />
+                        <Text style={styles.statText}>{item.expenses} expenses</Text>
+                    </View>
+                </View>
+
+                <Text style={[
+                    styles.balanceText,
+                    item.type === 'owed' ? styles.owedText :
+                        item.type === 'owe' ? styles.oweText : styles.settledText
+                ]}>
+                    {item.balance}
                 </Text>
-                <ChevronRightIcon size={20} color={COLORS.textMuted} />
             </View>
         </TouchableOpacity>
     );
 
     return (
-        <SafeAreaView style={styles.safeArea} edges={['top']}>
-            <View style={styles.container}>
-                <View style={styles.header}>
-                    <Text style={styles.title}>Split Expenses</Text>
-                    <TouchableOpacity style={styles.addButton}>
-                        <PlusIcon size={24} color={COLORS.buttonText} />
-                    </TouchableOpacity>
-                </View>
+        <View style={styles.mainContainer}>
+            <SafeAreaView edges={['top']} style={styles.safeArea}>
+                {renderHeader()}
+            </SafeAreaView>
 
-                <View style={styles.summaryCard}>
-                    <View style={styles.summaryItem}>
-                        <Text style={styles.summaryLabel}>You are owed</Text>
-                        <Text style={[styles.summaryValue, { color: COLORS.income }]}>$1,200.00</Text>
-                    </View>
-                    <View style={styles.divider} />
-                    <View style={styles.summaryItem}>
-                        <Text style={styles.summaryLabel}>You owe</Text>
-                        <Text style={[styles.summaryValue, { color: COLORS.expense }]}>$450.00</Text>
-                    </View>
-                </View>
+            <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
+                {hasGroups ? (
+                    <View style={styles.content}>
+                        <Text style={styles.sectionTitle}>Quick Access</Text>
+                        {quickAccessGroups.map(group => (
+                            <GroupCard key={group.id} item={group} isQuickAccess />
+                        ))}
 
-                <Text style={styles.sectionTitle}>Groups</Text>
-                <FlatList
-                    data={groups}
-                    renderItem={renderGroup}
-                    keyExtractor={(item) => item.id}
-                    contentContainerStyle={styles.listContent}
-                    showsVerticalScrollIndicator={false}
-                />
-            </View>
-        </SafeAreaView>
+                        <Text style={[styles.sectionTitle, { marginTop: 24 }]}>All Groups</Text>
+                        {allGroups.map(group => (
+                            <GroupCard key={group.id} item={group} />
+                        ))}
+                    </View>
+                ) : (
+                    <View style={styles.emptyState}>
+                        <View style={styles.emptyIllustration}>
+                            <Image
+                                source={{ uri: 'https://cdn-icons-png.flaticon.com/512/3135/3135715.png' }}
+                                style={styles.emptyImg}
+                                opacity={0.6}
+                            />
+                        </View>
+                        <Text style={styles.emptyTitle}>You have no group.</Text>
+                        <Text style={styles.emptySubtitle}>Create a first group and enjoy Fairpay!</Text>
+
+                        <View style={styles.emptyPointerContainer}>
+                            <Text style={styles.pointerArrow}>↑</Text>
+                        </View>
+                    </View>
+                )}
+                <View style={{ height: 120 }} />
+            </ScrollView>
+        </View>
     );
 };
 
 const styles = StyleSheet.create({
-    safeArea: { flex: 1, backgroundColor: COLORS.background },
-    container: { flex: 1, backgroundColor: COLORS.background, paddingHorizontal: 20 },
-    header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: 15, marginBottom: 20 },
-    title: { fontSize: 28, fontWeight: '800', color: COLORS.textPrimary },
-    addButton: { backgroundColor: COLORS.primary, width: 44, height: 44, borderRadius: 12, justifyContent: 'center', alignItems: 'center', shadowColor: COLORS.primary, shadowOffset: { width: 0, height: 4 }, shadowOpacity: 0.3, shadowRadius: 8, elevation: 5 },
-    summaryCard: { backgroundColor: COLORS.surface, borderRadius: 20, padding: 20, flexDirection: 'row', marginBottom: 30, borderWidth: 1, borderColor: COLORS.divider },
-    summaryItem: { flex: 1, alignItems: 'center' },
-    summaryLabel: { fontSize: 13, color: COLORS.textSecondary, marginBottom: 4 },
-    summaryValue: { fontSize: 18, fontWeight: '700' },
-    divider: { width: 1, backgroundColor: COLORS.divider, marginHorizontal: 10 },
-    sectionTitle: { fontSize: 18, fontWeight: '700', color: COLORS.textPrimary, marginBottom: 15 },
-    listContent: { paddingBottom: 100 },
-    groupCard: { backgroundColor: COLORS.surface, borderRadius: 16, padding: 16, flexDirection: 'row', alignItems: 'center', marginBottom: 12, borderWidth: 1, borderColor: COLORS.divider },
-    groupIcon: { width: 48, height: 48, borderRadius: 12, backgroundColor: COLORS.primaryMuted, justifyContent: 'center', alignItems: 'center' },
-    groupInfo: { flex: 1, marginLeft: 16 },
-    groupName: { fontSize: 16, fontWeight: '600', color: COLORS.textPrimary },
-    groupMembers: { fontSize: 13, color: COLORS.textSecondary, marginTop: 2 },
-    balanceInfo: { flexDirection: 'row', alignItems: 'center' },
-    balanceAmount: { fontSize: 15, fontWeight: '700', marginRight: 8 },
+    mainContainer: {
+        flex: 1,
+        backgroundColor: '#FBFBFB'
+    },
+    safeArea: {
+        backgroundColor: '#FBFBFB',
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingHorizontal: 24,
+        paddingVertical: 16,
+    },
+    headerTitle: {
+        fontSize: 32,
+        fontWeight: '800',
+        color: SPLIT_COLORS.textPrimary,
+    },
+    headerActions: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 12,
+    },
+    headerActionBtn: {
+        width: 44,
+        height: 44,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    plusBtn: {
+        width: 44,
+        height: 44,
+        backgroundColor: SPLIT_COLORS.primary,
+        borderRadius: 12,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    scrollView: {
+        flex: 1,
+    },
+    content: {
+        paddingHorizontal: 24,
+    },
+    sectionTitle: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: SPLIT_COLORS.textSecondary,
+        marginBottom: 16,
+        marginTop: 8,
+    },
+    card: {
+        backgroundColor: '#FFFFFF',
+        borderRadius: 20,
+        padding: 20,
+        marginBottom: 16,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.05,
+        shadowRadius: 10,
+        elevation: 2,
+    },
+    quickAccessCard: {
+        // Any specific styling for quick access
+    },
+    cardHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 16,
+    },
+    groupName: {
+        fontSize: 18,
+        fontWeight: '700',
+        color: SPLIT_COLORS.textPrimary,
+        flex: 1,
+    },
+    cardFooter: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
+    },
+    cardStats: {
+        gap: 8,
+    },
+    statItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 6,
+    },
+    statText: {
+        fontSize: 13,
+        color: SPLIT_COLORS.textSecondary,
+        fontWeight: '500',
+    },
+    balanceText: {
+        fontSize: 15,
+        fontWeight: '800',
+    },
+    owedText: {
+        color: SPLIT_COLORS.success,
+    },
+    oweText: {
+        color: SPLIT_COLORS.textPrimary, // Design shows black for 'owe' in some places, or maybe coral?
+    },
+    settledText: {
+        color: SPLIT_COLORS.textSecondary,
+    },
+    emptyState: {
+        flex: 1,
+        alignItems: 'center',
+        paddingTop: 80,
+        paddingHorizontal: 40,
+    },
+    emptyIllustration: {
+        width: 160,
+        height: 160,
+        backgroundColor: '#F9F9F9',
+        borderRadius: 40,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 32,
+    },
+    emptyImg: {
+        width: 80,
+        height: 80,
+    },
+    emptyTitle: {
+        fontSize: 18,
+        fontWeight: '700',
+        color: SPLIT_COLORS.textSecondary,
+        marginBottom: 8,
+    },
+    emptySubtitle: {
+        fontSize: 14,
+        color: 'rgba(108, 117, 125, 0.6)',
+        textAlign: 'center',
+        lineHeight: 20,
+    },
+    emptyPointerContainer: {
+        position: 'absolute',
+        top: 20,
+        right: 40,
+        alignItems: 'center',
+    },
+    pointerArrow: {
+        fontSize: 40,
+        color: '#f1f1f1',
+        fontWeight: '200',
+    },
+
 });
 
 export default SplitExpensesScreen;
